@@ -27,7 +27,7 @@
 typedef struct
 {
     unsigned char        size;
-    unsigned char        buffer[10];
+    unsigned char        buffer[64];
     mipi_dsi_cmd_id_t    cmd_id;
     mipi_dsi_cmd_flag_t flags;
 } lcd_table_setting_t;
