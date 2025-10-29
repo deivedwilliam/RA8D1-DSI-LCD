@@ -23,6 +23,9 @@
 #define YELLOW                                       (0xFFFFFF00)
 #define AQUA                                         (0xFF00FFFF)
 #define MAGENTA                                      (0x00FF00FF)
+#define RESET_FLAG                                   (false)
+#define SET_FLAG                                     (true)
+
 
 typedef struct
 {

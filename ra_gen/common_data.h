@@ -18,11 +18,11 @@ extern const mipi_phy_instance_t g_mipi_phy0;
 extern mipi_phy_ctrl_t g_mipi_phy0_ctrl;
 extern const mipi_phy_cfg_t g_mipi_phy0_cfg;
 /* MIPI DSI on MIPI DSI Instance. */
-extern const mipi_dsi_instance_t g_mipi_dsi0;
+extern const mipi_dsi_instance_t g_mipi_dsi;
 
 /* Access the MIPI DSI instance using these structures when calling API functions directly (::p_api is not used). */
-extern mipi_dsi_instance_ctrl_t g_mipi_dsi0_ctrl;
-extern const mipi_dsi_cfg_t g_mipi_dsi0_cfg;
+extern mipi_dsi_instance_ctrl_t g_mipi_dsi_ctrl;
+extern const mipi_dsi_cfg_t g_mipi_dsi_cfg;
 
 #ifndef mipi_dsi_callback
 void mipi_dsi_callback(mipi_dsi_callback_args_t *p_args);
@@ -37,20 +37,20 @@ void mipi_dsi_callback(mipi_dsi_callback_args_t *p_args);
 #define GLCDC_CFG_CORRECTION_GAMMA_ENABLE_B       (false)
 
 /* Display on GLCDC Instance. */
-extern const display_instance_t g_display0;
-extern display_runtime_cfg_t g_display0_runtime_cfg_fg;
-extern display_runtime_cfg_t g_display0_runtime_cfg_bg;
+extern const display_instance_t g_display;
+extern display_runtime_cfg_t g_display_runtime_cfg_fg;
+extern display_runtime_cfg_t g_display_runtime_cfg_bg;
 
 /** Access the GLCDC instance using these structures when calling API functions directly (::p_api is not used). */
-extern glcdc_instance_ctrl_t g_display0_ctrl;
-extern const display_cfg_t g_display0_cfg;
+extern glcdc_instance_ctrl_t g_display_ctrl;
+extern const display_cfg_t g_display_cfg;
 
 #if ((GLCDC_CFG_CORRECTION_GAMMA_ENABLE_R | GLCDC_CFG_CORRECTION_GAMMA_ENABLE_G | GLCDC_CFG_CORRECTION_GAMMA_ENABLE_B) && GLCDC_CFG_COLOR_CORRECTION_ENABLE && !(false))
-            extern display_gamma_correction_t g_display0_gamma_cfg;
+            extern display_gamma_correction_t g_display_gamma_cfg;
             #endif
 
 #if GLCDC_CFG_CLUT_ENABLE
-            extern display_clut_cfg_t g_display0_clut_cfg_glcdc;
+            extern display_clut_cfg_t g_display_clut_cfg_glcdc;
             #endif
 
 #ifndef glcdc_callback

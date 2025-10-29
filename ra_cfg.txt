@@ -426,8 +426,8 @@ FSP Configuration
       4th Port ELC Trigger Source: Disabled
       Pin Configuration Name: g_bsp_pin_cfg
       
-    Instance "g_display0 Graphics LCD (r_glcdc)"
-      General: Name: g_display0
+    Instance "g_display Graphics LCD (r_glcdc)"
+      General: Name: g_display
       Interrupts: Callback Function: glcdc_callback
       Interrupts: Line Detect Interrupt Priority: Priority 12
       Interrupts: Underflow 1 Interrupt Priority: Disabled
@@ -599,8 +599,8 @@ FSP Configuration
       Dithering: Pattern C: Pattern 11
       Dithering: Pattern D: Pattern 11
       
-      Instance "g_mipi_dsi0 MIPI Display (r_mipi_dsi)"
-        General: Name: g_mipi_dsi0
+      Instance "g_mipi_dsi MIPI Display (r_mipi_dsi)"
+        General: Name: g_mipi_dsi
         Options: LCD External Clock Hz: 0
         Low Power: Ultra Low Power State Wakeup Period (us): 1000
         Clock Lane: Continuous Mode: Enable

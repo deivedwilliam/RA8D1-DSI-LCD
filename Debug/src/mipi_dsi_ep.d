@@ -54,6 +54,7 @@ src/mipi_dsi_ep.o: ../src/mipi_dsi_ep.c ../src/mipi_dsi_ep.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_mipi_dsi_cfg.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_phy.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_mipi_cmd_types.h \
+ ../src/common_utils.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/hal_data.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/common_data.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_dsi.h \
@@ -126,6 +127,7 @@ C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_mipi_cmd_type
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_mipi_dsi_cfg.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_phy.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_mipi_cmd_types.h:
+../src/common_utils.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/hal_data.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/common_data.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_dsi.h:

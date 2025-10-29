@@ -8,13 +8,32 @@
 
 #include "mipi_dsi_ep.h"
 #include "r_mipi_dsi_api.h"
-
+#include "common_utils.h"
 
 
 #include "hal_data.h"
 
 /* Flag volátil para sinalizar a conclusão de um comando DSI */
 static volatile mipi_dsi_event_t g_dsi_event_flag;
+/* Variables to store resolution information */
+uint16_t g_hz_size, g_vr_size;
+/* Variables used for buffer usage */
+uint32_t g_buffer_size, g_hstride;
+uint32_t * gp_single_buffer = NULL;
+uint32_t * gp_double_buffer = NULL;
+uint32_t * gp_frame_buffer  = NULL;
+uint8_t read_data              = RESET_VALUE;
+uint16_t period_sec           = RESET_VALUE;
+
+volatile mipi_dsi_phy_status_t g_phy_status;
+volatile bool g_vsync_flag = RESET_FLAG;
+volatile bool g_message_sent = RESET_FLAG;
+volatile bool g_ulps_flag = RESET_FLAG;
+volatile bool g_irq_state = RESET_FLAG;
+volatile bool g_timer_overflow = RESET_FLAG;
+
+//coord_t touch_coordinates[5];
+//timer_info_t timer_info = { .clock_frequency = RESET_VALUE, .count_direction = RESET_VALUE, .period_counts = RESET_VALUE };
 
 const lcd_table_setting_t g_lcd_init_focuslcd[] =
 {
@@ -45,6 +64,48 @@ const lcd_table_setting_t g_lcd_init_focuslcd[] =
     {50, {0}, MIPI_DSI_DISPLAY_CONFIG_DATA_DELAY_FLAG, (mipi_dsi_cmd_flag_t)0 },           // DelayX1ms(50) deve ser chamado aqui no código C
     {0x00, {0}, MIPI_DSI_DISPLAY_CONFIG_DATA_END_OF_TABLE, (mipi_dsi_cmd_flag_t)0}
 };
+
+
+static void lcd_init_from_table (const lcd_table_setting_t *table);
+static void handle_error (fsp_err_t err,  const char * err_str);
+
+/*******************************************************************************************************************//**
+ * @brief      Initialize LCD
+ *
+ * @param[in]  table  LCD Controller Initialization structure.
+ * @retval     None.
+ **********************************************************************************************************************/
+static void lcd_init_from_table (const lcd_table_setting_t *table){
+    fsp_err_t err = FSP_SUCCESS;
+    const lcd_table_setting_t *p_entry = table;
+
+    while (p_entry->cmd_id != MIPI_DSI_DISPLAY_CONFIG_DATA_END_OF_TABLE){
+        mipi_dsi_cmd_t msg = {
+             .channel = 0,
+             .cmd_id = (mipi_dsi_cmd_id_t) p_entry->cmd_id,
+             .flags = p_entry->flags,
+             .tx_len = p_entry->size,
+             .p_tx_buffer = p_entry->buffer,
+        };
+
+        if ((mipi_dsi_cmd_id_t)MIPI_DSI_DISPLAY_CONFIG_DATA_DELAY_FLAG == msg.cmd_id)
+        {
+            R_BSP_SoftwareDelay (table->size, BSP_DELAY_UNITS_MILLISECONDS);
+        }
+        else
+        {
+            g_message_sent = false;
+            /* Send a command to the peripheral device */
+            err = R_MIPI_DSI_Command (&g_mipi_dsi_ctrl, &msg);
+            printf("%d: ** MIPI DSI Command API failed ** \r\n", (int)err);
+            /* Wait */
+            while (!g_message_sent);
+        }
+        p_entry++;
+    }
+}
+
+
 /**
  * @brief Callback da MIPI DSI.
  * Esta função é chamada pela interrupção da DSI.
@@ -60,13 +121,13 @@ void mipi_dsi_callback(mipi_dsi_callback_args_t *p_args)
         {
             if (p_args->tx_status == MIPI_DSI_SEQUENCE_STATUS_DESCRIPTORS_FINISHED)
             {
-              //  g_message_sent = SET_FLAG;
+                g_message_sent = SET_FLAG;
             }
             break;
         }
         case MIPI_DSI_EVENT_PHY:
         {
-         //   g_phy_status |= p_args->phy_status;
+            g_phy_status |= p_args->phy_status;
             break;
         }
         default:
@@ -75,6 +136,212 @@ void mipi_dsi_callback(mipi_dsi_callback_args_t *p_args)
         }
     }
 }
+
+/*******************************************************************************************************************//**
+ * @brief      Start video mode and draw color bands on the LCD screen
+ *
+ * @param[in]  None.
+ * @retval     None.
+ **********************************************************************************************************************/
+void mipi_dsi_start_display(void){
+    fsp_err_t err = FSP_SUCCESS;
+
+    /* Get LCDC configuration */
+    g_hz_size = (g_display_cfg.input[0].hsize);
+    g_vr_size = (g_display_cfg.input[0].vsize);
+    g_hstride = (g_display_cfg.input[0].hstride);
+
+    /* Initialize buffer pointers */
+    g_buffer_size = (uint32_t) (g_hz_size * g_vr_size * BYTES_PER_PIXEL);
+    gp_single_buffer = (uint32_t*) g_display_cfg.input[0].p_base;
+
+    /* Double buffer for drawing color bands with good quality */
+    gp_double_buffer = gp_single_buffer + g_buffer_size;
+
+//    /* Get timer information */
+//    err = R_GPT_InfoGet (&g_timer0_ctrl, &timer_info);
+//    /* Handle error */
+//    handle_error(err, "** GPT InfoGet API failed ** \r\n");
+
+    /* Start video mode */
+    err = R_GLCDC_Start(&g_display_ctrl);
+    /* Handle error */
+    handle_error(err, "** GLCDC Start API failed ** \r\n");
+
+//    /* Enable external interrupt */
+//    err = R_ICU_ExternalIrqEnable(&g_external_irq_ctrl);
+//    /* Handle error */
+//    handle_error(err, "** ICU ExternalIrqEnable API failed ** \r\n");
+
+    while (true){
+
+        uint8_t StatusRegister = RESET_VALUE;
+        bool touch_flag = RESET_FLAG;
+
+        /* User selects time to enter ULPS  */
+        err = mipi_dsi_set_display_time ();
+//        printf (err, "** mipi_dsi_set_display_time function failed ** \r\n");
+
+//        if (g_irq_state)
+//        {
+//            g_irq_state = RESET_FLAG;
+//            /* Get buffer status from gt911 device */
+//            memset(touch_coordinates, 0, sizeof(touch_coordinates));
+//            err = gt911_get_status (&StatusRegister, &touch_coordinates[0],
+//                                    sizeof(touch_coordinates)/sizeof(touch_coordinates[0]));
+//            handle_error (err, "** gt911_get_status function failed ** \r\n");
+//
+//            if (StatusRegister & GT911_BUFFER_STATUS_READY)
+//            {
+//                touch_flag = SET_FLAG;
+//
+//                /* Reset display time when touch is detected */
+//                err = R_GPT_Reset (&g_timer0_ctrl);
+//                g_timer_overflow = RESET_FLAG;
+//                handle_error (err, "** GPT Reset API failed ** \r\n");
+//            }
+//        }
+        if (g_ulps_flag)
+        {
+
+            if (touch_flag || g_timer_overflow)
+            {
+                /* Exit Ultra-low Power State (ULPS) and turn on the backlight */
+                mipi_dsi_ulps_exit();
+
+                /* Reset g_timer_overflow flag */
+                g_timer_overflow = RESET_FLAG;
+                /* Set display time */
+                err = timer_period_set(period_sec);
+                /* Handle error */
+                handle_error(err, "** Timer period set failed ** \r\n");
+            }
+        }
+        else
+        {
+            if (!g_timer_overflow)
+            {
+                /* Swap the active framebuffer */
+                gp_frame_buffer = (gp_frame_buffer == gp_single_buffer) ? gp_double_buffer : gp_single_buffer;
+
+                /* Display color bands on LCD screen */
+                display_draw (gp_frame_buffer);
+
+                /* Now that the framebuffer is ready, update the GLCDC buffer pointer on the next Vsync */
+                err = R_GLCDC_BufferChange (&g_display_ctrl, (uint8_t*) gp_frame_buffer, DISPLAY_FRAME_LAYER_1);
+                handle_error (err, "** GLCD BufferChange API failed ** \r\n");
+
+                /* Wait for a Vsync event */
+                g_vsync_flag = RESET_FLAG;
+                while (RESET_FLAG == g_vsync_flag);
+            }
+            else
+            {
+//                g_timer_overflow = RESET_FLAG;
+//                /* Enter Ultra-low Power State (ULPS) and turn off the backlight */
+//                mipi_dsi_ulps_enter();
+//                /* Set timer to exit  Ultra-low Power State (ULPS)*/
+//                err = timer_period_set(ULPS_EXIT_PERIOD_30SEC);
+//                /* Handle error */
+//                handle_error(err, "** Timer period set failed ** \r\n");
+            }
+        }
+    }
+}
+
+/*******************************************************************************************************************//**
+ * @brief      This function is used initialize related module and start display operation.
+ *
+ * @param[in]  none
+ * @retval     none
+ **********************************************************************************************************************/
+void mipi_dsi_entry(void)
+{
+    fsp_err_t          err        = FSP_SUCCESS;
+
+    /* Initialize GLCDC module */
+    err = R_GLCDC_Open(&g_display_ctrl, &g_display_cfg);
+    /* Handle error */
+    handle_error(err, "** GLCDC driver initialization FAILED ** \r\n");
+
+//    /* Initialize GPT module */
+//    err = R_GPT_Open(&g_timer0_ctrl, &g_timer0_cfg);
+//    /* Handle error */
+//    handle_error(err, "** R_GPT_Open API failed ** \r\n");
+//
+//    /* LCD reset */
+//    touch_screen_reset();
+
+    /* Initialize IIC MASTER module */
+//    err = R_IIC_MASTER_Open(&g_i2c_master_ctrl, &g_i2c_master_cfg);
+    /* Handle error */
+//    handle_error(err, "** IIC MASTER Open API failed ** \r\n");
+
+    /* Initialize LCD. */
+    lcd_init_from_table(g_lcd_init_focuslcd);
+
+    /* Initialize ICU module */
+//    err = R_ICU_ExternalIrqOpen(&g_external_irq_ctrl, &g_external_irq_cfg);
+    /* Handle error */
+//    handle_error(err, "** ICU ExternalIrqOpen API failed ** \r\n");
+
+    /* Start display 8-color bars */
+    mipi_dsi_start_display();
+}
+
+/*******************************************************************************************************************//**
+ *  @brief       This function handles errors, closes all opened modules, and prints errors.
+ *
+ *  @param[in]   err       error status
+ *  @param[in]   err_str   error string
+ *  @retval      None
+ **********************************************************************************************************************/
+static void handle_error (fsp_err_t err,  const char * err_str)
+{
+    if(err != FSP_SUCCESS){
+        /* Print the error */
+        puts(err_str);
+
+//        /* Close opened GPT module*/
+//        if(RESET_VALUE != g_timer0_ctrl.open)
+//        {
+//            if(FSP_SUCCESS != R_GPT_Close (&g_timer0_ctrl))
+//            {
+//                APP_ERR_PRINT("GPT Close API failed\r\n");
+//            }
+//        }
+
+        /* Close opened GLCD module*/
+        if(g_display_ctrl.state != RESET_VALUE)
+        {
+            if(FSP_SUCCESS != R_GLCDC_Close (&g_display_ctrl))
+            {
+                puts("GLCDC Close API failed\r\n");
+            }
+        }
+
+//        /* Close opened ICU module*/
+//        if(RESET_VALUE != g_external_irq_ctrl.open)
+//        {
+//            if(FSP_SUCCESS != R_ICU_ExternalIrqClose (&g_external_irq_ctrl))
+//            {
+//                APP_ERR_PRINT("ICU ExternalIrqClose API failed\r\n");
+//            }
+//        }
+
+//        /* Close opened IIC master module*/
+//        if(RESET_VALUE != g_i2c_master_ctrl.open)
+//        {
+//            if(FSP_SUCCESS != R_IIC_MASTER_Close(&g_i2c_master_ctrl))
+//            {
+//                APP_ERR_PRINT("IIC MASTER Close API failed\r\n");
+//            }
+//        }
+
+        printf( "\r\nReturned Error Code: 0x%x \r\n", err);
+    }
+}
+
 
 /*******************************************************************************************************************//**
  * @brief      Callback functions for GLCDC interrupts
@@ -86,7 +353,7 @@ void glcdc_callback (display_callback_args_t * p_args)
 {
     if (p_args->event == DISPLAY_EVENT_LINE_DETECTION)
     {
-//        g_vsync_flag = SET_FLAG;
+        g_vsync_flag = SET_FLAG;
     }
 }
 

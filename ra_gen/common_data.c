@@ -46,15 +46,15 @@ const mipi_phy_cfg_t g_mipi_phy0_cfg =
 /* Instance structure to use this module. */
 const mipi_phy_instance_t g_mipi_phy0 =
 { .p_ctrl = &g_mipi_phy0_ctrl, .p_cfg = &g_mipi_phy0_cfg, .p_api = &g_mipi_phy };
-mipi_dsi_instance_ctrl_t g_mipi_dsi0_ctrl;
+mipi_dsi_instance_ctrl_t g_mipi_dsi_ctrl;
 
-const mipi_dsi_timing_t g_mipi_dsi0_timing =
+const mipi_dsi_timing_t g_mipi_dsi_timing =
 { .clock_stop_time = MIPI_PHY_CLKSTPT,
   .clock_beforehand_time = MIPI_PHY_CLKBFHT,
   .clock_keep_time = MIPI_PHY_CLKKPT,
   .go_lp_and_back = MIPI_PHY_GOLPBKT, };
 
-const mipi_dsi_extended_cfg_t g_mipi_dsi0_extended_cfg =
+const mipi_dsi_extended_cfg_t g_mipi_dsi_extended_cfg =
 { .dsi_seq0.ipl = (12), .dsi_seq0.irq = VECTOR_NUMBER_MIPIDSI_SEQ0,
 
 .dsi_seq1.ipl = (12),
@@ -90,10 +90,10 @@ const mipi_dsi_extended_cfg_t g_mipi_dsi0_extended_cfg =
           | R_MIPI_DSI_SQCH1IER_TXIBERR_Msk | R_MIPI_DSI_SQCH1IER_RXFERR_Msk | R_MIPI_DSI_SQCH1IER_RXFAIL_Msk
           | R_MIPI_DSI_SQCH1IER_RXPFAIL_Msk | R_MIPI_DSI_SQCH1IER_RXCORERR_Msk | R_MIPI_DSI_SQCH1IER_RXAKE_Msk | 0x0, };
 
-const mipi_dsi_cfg_t g_mipi_dsi0_cfg =
+const mipi_dsi_cfg_t g_mipi_dsi_cfg =
         { .p_mipi_phy_instance = &g_mipi_phy0,
 
-          .p_timing = &g_mipi_dsi0_timing,
+          .p_timing = &g_mipi_dsi_timing,
 
           .sync_pulse = (1),
           .data_type = MIPI_DSI_VIDEO_DATA_24RGB_PIXEL_STREAM,
@@ -135,13 +135,13 @@ const mipi_dsi_cfg_t g_mipi_dsi0_cfg =
           .tearing_detect = (0),
           .eotp_enable = (1),
 
-          .p_extend = &g_mipi_dsi0_extended_cfg,
+          .p_extend = &g_mipi_dsi_extended_cfg,
           .p_callback = mipi_dsi_callback,
           .p_context = NULL, };
 
 /* Instance structure to use this module. */
-const mipi_dsi_instance_t g_mipi_dsi0 =
-{ .p_ctrl = &g_mipi_dsi0_ctrl, .p_cfg = &g_mipi_dsi0_cfg, .p_api = &g_mipi_dsi };
+const mipi_dsi_instance_t g_mipi_dsi =
+{ .p_ctrl = &g_mipi_dsi_ctrl, .p_cfg = &g_mipi_dsi_cfg, .p_api = &g_mipi_dsi };
 /** Display framebuffer */
 #if GLCDC_CFG_LAYER_1_ENABLE
         uint8_t fb_background[2][DISPLAY_BUFFER_STRIDE_BYTES_INPUT0 * DISPLAY_VSIZE_INPUT0] BSP_ALIGN_VARIABLE(64) BSP_PLACE_IN_SECTION(BSP_UNINIT_SECTION_PREFIX ".sdram_noinit");
@@ -159,7 +159,7 @@ const mipi_dsi_instance_t g_mipi_dsi0 =
         static uint32_t CLUT_buffer[256];
 
         /** Display CLUT configuration(only used if using CLUT format) */
-        display_clut_cfg_t g_display0_clut_cfg_glcdc =
+        display_clut_cfg_t g_display_clut_cfg_glcdc =
         {
             .p_base              = (uint32_t *)CLUT_buffer,
             .start               = 0,   /* User have to update this setting when using */
@@ -193,7 +193,7 @@ const mipi_dsi_instance_t g_mipi_dsi0 =
         static GLCDC_CFG_CORRECTION_GAMMA_TABLE_CONST uint16_t glcdc_gamma_b_gain[DISPLAY_GAMMA_CURVE_ELEMENT_NUM] = {1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024};
         static GLCDC_CFG_CORRECTION_GAMMA_TABLE_CONST uint16_t glcdc_gamma_b_threshold[DISPLAY_GAMMA_CURVE_ELEMENT_NUM] = {0, 64, 128, 192, 256, 320, 384, 448, 512, 576, 640, 704, 768, 832, 896, 960};
         #endif
-        GLCDC_CFG_CORRECTION_GAMMA_TABLE_CONST display_gamma_correction_t g_display0_gamma_cfg =
+        GLCDC_CFG_CORRECTION_GAMMA_TABLE_CONST display_gamma_correction_t g_display_gamma_cfg =
         {
             .r =
             {
@@ -232,11 +232,11 @@ const mipi_dsi_instance_t g_mipi_dsi0 =
         #endif
 
 #define RA_NOT_DEFINED (1)
-#if (RA_NOT_DEFINED != g_mipi_dsi0)
-const mipi_dsi_instance_t g_mipi_dsi0;
+#if (RA_NOT_DEFINED != g_mipi_dsi)
+const mipi_dsi_instance_t g_mipi_dsi;
 #endif
 /** Display device extended configuration */
-const glcdc_extended_cfg_t g_display0_extend_cfg =
+const glcdc_extended_cfg_t g_display_extend_cfg =
 { .tcon_hsync = GLCDC_TCON_PIN_1,
   .tcon_vsync = GLCDC_TCON_PIN_0,
   .tcon_de = GLCDC_TCON_PIN_2,
@@ -248,8 +248,8 @@ const glcdc_extended_cfg_t g_display0_extend_cfg =
   .dithering_pattern_B = GLCDC_DITHERING_PATTERN_11,
   .dithering_pattern_C = GLCDC_DITHERING_PATTERN_11,
   .dithering_pattern_D = GLCDC_DITHERING_PATTERN_11,
-#if (RA_NOT_DEFINED != g_mipi_dsi0)
-  .phy_layer = (void*) &g_mipi_dsi0
+#if (RA_NOT_DEFINED != g_mipi_dsi)
+  .phy_layer = (void*) &g_mipi_dsi
 #else
             .phy_layer             = NULL
         #endif
@@ -257,10 +257,10 @@ const glcdc_extended_cfg_t g_display0_extend_cfg =
 #undef RA_NOT_DEFINED
 
 /** Display control block instance */
-glcdc_instance_ctrl_t g_display0_ctrl;
+glcdc_instance_ctrl_t g_display_ctrl;
 
 /** Display interface configuration */
-const display_cfg_t g_display0_cfg =
+const display_cfg_t g_display_cfg =
         {
         /** Input1(Graphics1 layer) configuration */
         .input[0] =
@@ -332,9 +332,9 @@ const display_cfg_t g_display0_cfg =
                 },
 #if (GLCDC_CFG_CORRECTION_GAMMA_ENABLE_R | GLCDC_CFG_CORRECTION_GAMMA_ENABLE_G | GLCDC_CFG_CORRECTION_GAMMA_ENABLE_B)
  #if false
-                .p_gamma_correction  = GLCDC_CFG_CORRECTION_GAMMA_CFG_CAST (&g_display0_gamma_cfg),
+                .p_gamma_correction  = GLCDC_CFG_CORRECTION_GAMMA_CFG_CAST (&g_display_gamma_cfg),
  #else
-                .p_gamma_correction  = &g_display0_gamma_cfg,
+                .p_gamma_correction  = &g_display_gamma_cfg,
  #endif
 #else
                 .p_gamma_correction  = NULL,
@@ -347,7 +347,7 @@ const display_cfg_t g_display0_cfg =
           .p_context = NULL,
 
           /** Display device extended configuration */
-          .p_extend = (void*) (&g_display0_extend_cfg),
+          .p_extend = (void*) (&g_display_extend_cfg),
 
           .line_detect_ipl = (12),
           .underflow_1_ipl = (BSP_IRQ_DISABLED), .underflow_2_ipl = (BSP_IRQ_DISABLED),
@@ -371,7 +371,7 @@ const display_cfg_t g_display0_cfg =
 
 #if GLCDC_CFG_LAYER_1_ENABLE
         /** Display on GLCDC run-time configuration(for the graphics1 layer) */
-        display_runtime_cfg_t g_display0_runtime_cfg_bg =
+        display_runtime_cfg_t g_display_runtime_cfg_bg =
         {
             .input =
             {
@@ -401,7 +401,7 @@ const display_cfg_t g_display0_cfg =
 #endif
 #if GLCDC_CFG_LAYER_2_ENABLE
         /** Display on GLCDC run-time configuration(for the graphics2 layer) */
-        display_runtime_cfg_t g_display0_runtime_cfg_fg =
+        display_runtime_cfg_t g_display_runtime_cfg_fg =
         {
             .input =
             {
@@ -431,8 +431,8 @@ const display_cfg_t g_display0_cfg =
 #endif
 
 /* Instance structure to use this module. */
-const display_instance_t g_display0 =
-{ .p_ctrl = &g_display0_ctrl, .p_cfg = (display_cfg_t*) &g_display0_cfg, .p_api = (display_api_t*) &g_display_on_glcdc };
+const display_instance_t g_display =
+{ .p_ctrl = &g_display_ctrl, .p_cfg = (display_cfg_t*) &g_display_cfg, .p_api = (display_api_t*) &g_display_on_glcdc };
 ioport_instance_ctrl_t g_ioport_ctrl;
 const ioport_instance_t g_ioport =
 { .p_api = &g_ioport_on_ioport, .p_ctrl = &g_ioport_ctrl, .p_cfg = &g_bsp_pin_cfg, };

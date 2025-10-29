@@ -351,7 +351,7 @@
       <property id="module.driver.ioport.pincfg" value="g_bsp_pin_cfg"/>
     </module>
     <module id="module.driver.display_on_glcdc.1058329126">
-      <property id="module.driver.display.name" value="g_display0"/>
+      <property id="module.driver.display.name" value="g_display"/>
       <property id="module.driver.display.callback" value="glcdc_callback"/>
       <property id="module.driver.display.line_detect_ipl" value="board.icu.common.irq.priority12"/>
       <property id="module.driver.display.underflow_1_ipl" value="_disabled"/>
@@ -524,7 +524,7 @@
       <property id="module.driver.display.dithering_pattern_D" value="module.driver.display.dithering_pattern_D.dithering_pattern_11"/>
     </module>
     <module id="module.driver.mipi_dsi.1534836352">
-      <property id="module.driver.mipi_dsi.name" value="g_mipi_dsi0"/>
+      <property id="module.driver.mipi_dsi.name" value="g_mipi_dsi"/>
       <property id="module.driver.mipi_dsi.display.ext_clk_freq" value="0"/>
       <property id="module.driver.mipi_dsi.ulps_wakeup_period" value="1000"/>
       <property id="module.driver.mipi_dsi.continuous_clock" value="module.driver.mipi_dsi.continuous_clock.enable"/>

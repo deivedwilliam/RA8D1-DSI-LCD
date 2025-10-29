@@ -140,24 +140,60 @@ Discarded input sections
  .text          0x00000000        0x0 ./src/mipi_dsi_ep.o
  .data          0x00000000        0x0 ./src/mipi_dsi_ep.o
  .bss           0x00000000        0x0 ./src/mipi_dsi_ep.o
+ .rodata.lcd_init_from_table.str1.4
+                0x00000000       0x25 ./src/mipi_dsi_ep.o
+ .text.lcd_init_from_table
+                0x00000000       0x88 ./src/mipi_dsi_ep.o
  .text.mipi_dsi_callback
                 0x00000000        0x4 ./src/mipi_dsi_ep.o
  .text.glcdc_callback
                 0x00000000        0x4 ./src/mipi_dsi_ep.o
  .rodata.g_lcd_init_focuslcd
-                0x00000000        0x0 ./src/mipi_dsi_ep.o
+                0x00000000      0x6ce ./src/mipi_dsi_ep.o
+ .bss.g_timer_overflow
+                0x00000000        0x1 ./src/mipi_dsi_ep.o
+ .bss.g_irq_state
+                0x00000000        0x1 ./src/mipi_dsi_ep.o
+ .bss.g_ulps_flag
+                0x00000000        0x1 ./src/mipi_dsi_ep.o
+ .bss.g_message_sent
+                0x00000000        0x1 ./src/mipi_dsi_ep.o
+ .bss.g_vsync_flag
+                0x00000000        0x1 ./src/mipi_dsi_ep.o
+ .bss.g_phy_status
+                0x00000000        0x4 ./src/mipi_dsi_ep.o
+ .bss.period_sec
+                0x00000000        0x2 ./src/mipi_dsi_ep.o
+ .bss.read_data
+                0x00000000        0x1 ./src/mipi_dsi_ep.o
+ .bss.gp_frame_buffer
+                0x00000000        0x4 ./src/mipi_dsi_ep.o
+ .bss.gp_double_buffer
+                0x00000000        0x4 ./src/mipi_dsi_ep.o
+ .bss.gp_single_buffer
+                0x00000000        0x4 ./src/mipi_dsi_ep.o
+ .bss.g_hstride
+                0x00000000        0x4 ./src/mipi_dsi_ep.o
+ .bss.g_buffer_size
+                0x00000000        0x4 ./src/mipi_dsi_ep.o
+ .bss.g_vr_size
+                0x00000000        0x2 ./src/mipi_dsi_ep.o
+ .bss.g_hz_size
+                0x00000000        0x2 ./src/mipi_dsi_ep.o
  .bss.g_dsi_event_flag
                 0x00000000        0x1 ./src/mipi_dsi_ep.o
- .debug_info    0x00000000      0x8e6 ./src/mipi_dsi_ep.o
- .debug_abbrev  0x00000000      0x200 ./src/mipi_dsi_ep.o
+ .debug_info    0x00000000     0x19f9 ./src/mipi_dsi_ep.o
+ .debug_abbrev  0x00000000      0x3c2 ./src/mipi_dsi_ep.o
+ .debug_loclists
+                0x00000000       0x8a ./src/mipi_dsi_ep.o
  .debug_aranges
-                0x00000000       0x28 ./src/mipi_dsi_ep.o
+                0x00000000       0x30 ./src/mipi_dsi_ep.o
  .debug_rnglists
-                0x00000000       0x19 ./src/mipi_dsi_ep.o
- .debug_line    0x00000000      0x1ca ./src/mipi_dsi_ep.o
- .debug_str     0x00000000     0x1d20 ./src/mipi_dsi_ep.o
+                0x00000000       0x3b ./src/mipi_dsi_ep.o
+ .debug_line    0x00000000      0x3a4 ./src/mipi_dsi_ep.o
+ .debug_str     0x00000000     0x3f5b ./src/mipi_dsi_ep.o
  .comment       0x00000000       0x46 ./src/mipi_dsi_ep.o
- .debug_frame   0x00000000       0x30 ./src/mipi_dsi_ep.o
+ .debug_frame   0x00000000       0x60 ./src/mipi_dsi_ep.o
  .ARM.attributes
                 0x00000000       0x3e ./src/mipi_dsi_ep.o
  .text          0x00000000        0x0 ./src/system.o
