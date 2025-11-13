@@ -41,7 +41,7 @@
     <node id="board.clock.pll2r.div" option="board.clock.pll2r.div.2"/>
     <node id="board.clock.pll2r.display" option="board.clock.pll2r.display.value"/>
     <node id="board.clock.clock.source" option="board.clock.clock.source.pll1p"/>
-    <node id="board.clock.clkout.source" option="board.clock.clkout.source.disabled"/>
+    <node id="board.clock.clkout.source" option="board.clock.clkout.source.loco"/>
     <node id="board.clock.sciclk.source" option="board.clock.sciclk.source.pll1p"/>
     <node id="board.clock.spiclk.source" option="board.clock.spiclk.source.disabled"/>
     <node id="board.clock.canfdclk.source" option="board.clock.canfdclk.source.disabled"/>
@@ -65,7 +65,7 @@
     <node id="board.clock.sciclk.div" option="board.clock.sciclk.div.4"/>
     <node id="board.clock.spiclk.div" option="board.clock.spiclk.div.4"/>
     <node id="board.clock.canfdclk.div" option="board.clock.canfdclk.div.8"/>
-    <node id="board.clock.lcdclk.div" option="board.clock.lcdclk.div.4"/>
+    <node id="board.clock.lcdclk.div" option="board.clock.lcdclk.div.2"/>
     <node id="board.clock.i3cclk.div" option="board.clock.i3cclk.div.3"/>
     <node id="board.clock.uck.div" option="board.clock.uck.div.1"/>
     <node id="board.clock.u60ck.div" option="board.clock.u60ck.div.8"/>
@@ -100,9 +100,10 @@
       <configSetting altId="jtag_fslash_swd.tdo.p209" configurationId="jtag_fslash_swd.tdo" peripheral="JTAG/SWD"/>
       <configSetting altId="jtag_fslash_swd.tms.p210" configurationId="jtag_fslash_swd.tms" peripheral="JTAG/SWD"/>
       <configSetting altId="mipi.dsi_te.p206" configurationId="mipi.dsi_te" peripheral="MIPI"/>
-      <configSetting altId="p200.output.low" configurationId="p200"/>
+      <configSetting altId="p200.input" configurationId="p200"/>
       <configSetting altId="p408.output.low" configurationId="p408"/>
       <configSetting altId="p411.output.low" configurationId="p411"/>
+      <configSetting altId="p412.output.low" configurationId="p412"/>
       <configSetting altId="p706.output.low" configurationId="p706"/>
       <configSetting altId="sci4.rxd4.p414" configurationId="sci4.rxd4" isUsedByDriver="true" peripheral="SCI4"/>
       <configSetting altId="sci4.txd4.p415" configurationId="sci4.txd4" isUsedByDriver="true" peripheral="SCI4"/>

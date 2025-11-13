@@ -226,7 +226,7 @@
     <node id="board.clock.pll2r.div" option="board.clock.pll2r.div.2"/>
     <node id="board.clock.pll2r.display" option="board.clock.pll2r.display.value"/>
     <node id="board.clock.clock.source" option="board.clock.clock.source.pll1p"/>
-    <node id="board.clock.clkout.source" option="board.clock.clkout.source.disabled"/>
+    <node id="board.clock.clkout.source" option="board.clock.clkout.source.loco"/>
     <node id="board.clock.sciclk.source" option="board.clock.sciclk.source.pll1p"/>
     <node id="board.clock.spiclk.source" option="board.clock.spiclk.source.disabled"/>
     <node id="board.clock.canfdclk.source" option="board.clock.canfdclk.source.disabled"/>
@@ -250,7 +250,7 @@
     <node id="board.clock.sciclk.div" option="board.clock.sciclk.div.4"/>
     <node id="board.clock.spiclk.div" option="board.clock.spiclk.div.4"/>
     <node id="board.clock.canfdclk.div" option="board.clock.canfdclk.div.8"/>
-    <node id="board.clock.lcdclk.div" option="board.clock.lcdclk.div.4"/>
+    <node id="board.clock.lcdclk.div" option="board.clock.lcdclk.div.2"/>
     <node id="board.clock.i3cclk.div" option="board.clock.i3cclk.div.3"/>
     <node id="board.clock.uck.div" option="board.clock.uck.div.1"/>
     <node id="board.clock.u60ck.div" option="board.clock.u60ck.div.8"/>
@@ -353,26 +353,26 @@
     <module id="module.driver.display_on_glcdc.1058329126">
       <property id="module.driver.display.name" value="g_display"/>
       <property id="module.driver.display.callback" value="glcdc_callback"/>
-      <property id="module.driver.display.line_detect_ipl" value="board.icu.common.irq.priority12"/>
+      <property id="module.driver.display.line_detect_ipl" value="board.icu.common.irq.priority1"/>
       <property id="module.driver.display.underflow_1_ipl" value="_disabled"/>
       <property id="module.driver.display.underflow_2_ipl" value="_disabled"/>
       <property id="module.driver.display.input0.enable" value="module.driver.display.input0.enable.true"/>
-      <property id="module.driver.display.input0.hsize" value="480"/>
-      <property id="module.driver.display.input0.vsize" value="854"/>
+      <property id="module.driver.display.input0.hsize" value="1280"/>
+      <property id="module.driver.display.input0.vsize" value="720"/>
       <property id="module.driver.display.layer0.coordinate.x" value="0"/>
       <property id="module.driver.display.layer0.coordinate.y" value="0"/>
       <property id="module.driver.display.input0.buffer_name" value="fb_background"/>
       <property id="module.driver.display.input0.buffer_number" value="2"/>
       <property id="module.driver.display.input0.section" value=".sdram_noinit"/>
-      <property id="module.driver.display.input0.format" value="module.driver.display.input0.format.in_format_16bits_rgb565"/>
+      <property id="module.driver.display.input0.format" value="module.driver.display.input0.format.in_format_32bits_rgb888"/>
       <property id="module.driver.display.input0.line_descending_enable" value="module.driver.display.input0.line_descending_enable.false"/>
       <property id="module.driver.display.input0.lines_repeat_enable" value="module.driver.display.input0.lines_repeat_enable.false"/>
       <property id="module.driver.display.input0.lines_repeat_times" value="0"/>
       <property id="module.driver.display.layer0.fade_control" value="module.driver.display.layer0.fade_control.fade_control_none"/>
       <property id="module.driver.display.layer0.fade_speed" value="0"/>
       <property id="module.driver.display.input1.enable" value="module.driver.display.input1.enable.false"/>
-      <property id="module.driver.display.input1.hsize" value="480"/>
-      <property id="module.driver.display.input1.vsize" value="854"/>
+      <property id="module.driver.display.input1.hsize" value="720"/>
+      <property id="module.driver.display.input1.vsize" value="720"/>
       <property id="module.driver.display.layer1.coordinate.x" value="0"/>
       <property id="module.driver.display.layer1.coordinate.y" value="0"/>
       <property id="module.driver.display.input1.buffer_name" value="fb_foreground"/>
@@ -384,25 +384,25 @@
       <property id="module.driver.display.input1.lines_repeat_times" value="0"/>
       <property id="module.driver.display.layer1.fade_control" value="module.driver.display.layer1.fade_control.fade_control_none"/>
       <property id="module.driver.display.layer1.fade_speed" value="0"/>
-      <property id="module.driver.display.output.htiming.total_cyc" value="800"/>
-      <property id="module.driver.display.output.htiming.display_cyc" value="640"/>
-      <property id="module.driver.display.output.htiming.back_porch" value="80"/>
-      <property id="module.driver.display.output.htiming.sync_width" value="64"/>
-      <property id="module.driver.display.output.htiming.sync_polarity" value="module.driver.display.output.htiming.sync_polarity.signal_polarity_loactive"/>
-      <property id="module.driver.display.output.vtiming.total_cyc" value="500"/>
-      <property id="module.driver.display.output.vtiming.display_cyc" value="480"/>
-      <property id="module.driver.display.output.vtiming.back_porch" value="13"/>
-      <property id="module.driver.display.output.vtiming.sync_width" value="4"/>
+      <property id="module.driver.display.output.htiming.total_cyc" value="1650"/>
+      <property id="module.driver.display.output.htiming.display_cyc" value="1280"/>
+      <property id="module.driver.display.output.htiming.back_porch" value="220"/>
+      <property id="module.driver.display.output.htiming.sync_width" value="40"/>
+      <property id="module.driver.display.output.htiming.sync_polarity" value="module.driver.display.output.htiming.sync_polarity.signal_polarity_hiactive"/>
+      <property id="module.driver.display.output.vtiming.total_cyc" value="750"/>
+      <property id="module.driver.display.output.vtiming.display_cyc" value="720"/>
+      <property id="module.driver.display.output.vtiming.back_porch" value="20"/>
+      <property id="module.driver.display.output.vtiming.sync_width" value="5"/>
       <property id="module.driver.display.output.vtiming.sync_polarity" value="module.driver.display.output.vtiming.sync_polarity.signal_polarity_hiactive"/>
       <property id="module.driver.display.output.data_enable_polarity" value="module.driver.display.output.data_enable_polarity.signal_polarity_hiactive"/>
-      <property id="module.driver.display.output.sync_edge" value="module.driver.display.output.sync_edge.signal_sync_edge_falling"/>
+      <property id="module.driver.display.output.sync_edge" value="module.driver.display.output.sync_edge.signal_sync_edge_rising"/>
       <property id="module.driver.display.output.format" value="module.driver.display.output.format.out_format_24bits_rgb888"/>
       <property id="module.driver.display.output.color_order" value="module.driver.display.output.color_order.color_order_rgb"/>
       <property id="module.driver.display.output.endian" value="module.driver.display.output.endian.endian_little"/>
       <property id="module.driver.display.output.bg_color.byte.a" value="255"/>
       <property id="module.driver.display.output.bg_color.byte.r" value="0"/>
       <property id="module.driver.display.output.bg_color.byte.g" value="0"/>
-      <property id="module.driver.display.output.bg_color.byte.b" value="0"/>
+      <property id="module.driver.display.output.bg_color.byte.b" value="255"/>
       <property id="module.driver.display.clut.enable" value="module.driver.display.clut.enable.false"/>
       <property id="module.driver.display.clut.size" value="256"/>
       <property id="module.driver.display.tcon_hsync" value="module.driver.display.tcon_hsync.tcon_pin_1"/>
@@ -524,12 +524,12 @@
       <property id="module.driver.display.dithering_pattern_D" value="module.driver.display.dithering_pattern_D.dithering_pattern_11"/>
     </module>
     <module id="module.driver.mipi_dsi.1534836352">
-      <property id="module.driver.mipi_dsi.name" value="g_mipi_dsi"/>
+      <property id="module.driver.mipi_dsi.name" value="g_mipi_dsi0"/>
       <property id="module.driver.mipi_dsi.display.ext_clk_freq" value="0"/>
       <property id="module.driver.mipi_dsi.ulps_wakeup_period" value="1000"/>
       <property id="module.driver.mipi_dsi.continuous_clock" value="module.driver.mipi_dsi.continuous_clock.enable"/>
       <property id="module.driver.mipi_dsi.num_lanes" value="2"/>
-      <property id="module.driver.mipi_dsi.txesync" value="module.driver.mipi_dsi.txesync.enable"/>
+      <property id="module.driver.mipi_dsi.txesync" value="module.driver.mipi_dsi.txesync.disable"/>
       <property id="module.driver.mipi_dsi.vc" value="0"/>
       <property id="module.driver.mipi_dsi.dly_override" value="0"/>
       <property id="module.driver.mipi_dsi.no_lp" value=""/>
@@ -564,7 +564,7 @@
     </module>
     <module id="module.driver.mipi_phy.2014025735">
       <property id="module.driver.mipi_phy.name" value="g_mipi_phy0"/>
-      <property id="module.driver.mipi_phy.pll_mhz" value="1000.00"/>
+      <property id="module.driver.mipi_phy.pll_mhz" value="900"/>
       <property id="module.driver.mipi_phy.lp_divisor" value="5"/>
       <property id="module.driver.mipi_phy.t_init" value="600000"/>
       <property id="module.driver.mipi_phy.t_hs_prep_ns" value="40"/>
@@ -669,9 +669,10 @@
     </config>
   </raModuleConfiguration>
   <raPinConfiguration>
-    <symbolicName propertyId="p200.symbolic_name" value="MIPI_SELECT"/>
+    <symbolicName propertyId="p200.symbolic_name" value="DEAD_PIN"/>
     <symbolicName propertyId="p408.symbolic_name" value="BACKLIGHT"/>
     <symbolicName propertyId="p411.symbolic_name" value="LED_STATE"/>
+    <symbolicName propertyId="p412.symbolic_name" value="DSI_DEST_SELECT"/>
     <symbolicName propertyId="p414.symbolic_name" value="UART4_RX"/>
     <symbolicName propertyId="p415.symbolic_name" value="UART4_TX"/>
     <symbolicName propertyId="p706.symbolic_name" value="RESET_N"/>
@@ -698,8 +699,8 @@
       <configSetting altId="p115.sdram.sdcs" configurationId="p115"/>
       <configSetting altId="p115.gpio_speed.gpio_speed_h" configurationId="p115.gpio_drivecapacity"/>
       <configSetting altId="p115.gpio_mode.gpio_mode_peripheral" configurationId="p115.gpio_mode"/>
-      <configSetting altId="p200.output.low" configurationId="p200"/>
-      <configSetting altId="p200.gpio_mode.gpio_mode_out.low" configurationId="p200.gpio_mode"/>
+      <configSetting altId="p200.input" configurationId="p200"/>
+      <configSetting altId="p200.gpio_mode.gpio_mode_in" configurationId="p200.gpio_mode"/>
       <configSetting altId="p206.mipi.dsi_te" configurationId="p206"/>
       <configSetting altId="p206.gpio_mode.gpio_mode_peripheral" configurationId="p206.gpio_mode"/>
       <configSetting altId="p208.jtag_fslash_swd.tdi" configurationId="p208"/>
@@ -761,6 +762,8 @@
       <configSetting altId="p410.gpio_mode.gpio_mode_peripheral" configurationId="p410.gpio_mode"/>
       <configSetting altId="p411.output.low" configurationId="p411"/>
       <configSetting altId="p411.gpio_mode.gpio_mode_out.low" configurationId="p411.gpio_mode"/>
+      <configSetting altId="p412.output.low" configurationId="p412"/>
+      <configSetting altId="p412.gpio_mode.gpio_mode_out.low" configurationId="p412.gpio_mode"/>
       <configSetting altId="p414.sci4.rxd4" configurationId="p414"/>
       <configSetting altId="p414.gpio_mode.gpio_mode_peripheral" configurationId="p414.gpio_mode"/>
       <configSetting altId="p415.sci4.txd4" configurationId="p415"/>
@@ -880,6 +883,7 @@
       <configSetting altId="sdram.sdclk.pa09" configurationId="sdram.sdclk"/>
       <configSetting altId="sdram.sdcs.p115" configurationId="sdram.sdcs"/>
       <configSetting altId="sdram.we.p114" configurationId="sdram.we"/>
+      <configSetting altId="system.mode.custom.free" configurationId="system.mode"/>
       <configSetting altId="usbfs.mode.custom.free" configurationId="usbfs.mode"/>
       <configSetting altId="usbfs.usb_dm.p815" configurationId="usbfs.usb_dm"/>
       <configSetting altId="usbfs.usb_dp.p814" configurationId="usbfs.usb_dp"/>

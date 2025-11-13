@@ -9,7 +9,6 @@
 #define MIPI_DSI_EP_H_
 
 #include "r_mipi_dsi_api.h"
-#include "r_mipi_cmd_types.h"
 
 #define MIPI_DSI_DISPLAY_CONFIG_DATA_DELAY_FLAG      ((mipi_dsi_cmd_id_t) 0xFE)
 #define MIPI_DSI_DISPLAY_CONFIG_DATA_END_OF_TABLE    ((mipi_dsi_cmd_id_t) 0xFD)

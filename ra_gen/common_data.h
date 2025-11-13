@@ -18,11 +18,11 @@ extern const mipi_phy_instance_t g_mipi_phy0;
 extern mipi_phy_ctrl_t g_mipi_phy0_ctrl;
 extern const mipi_phy_cfg_t g_mipi_phy0_cfg;
 /* MIPI DSI on MIPI DSI Instance. */
-extern const mipi_dsi_instance_t g_mipi_dsi;
+extern const mipi_dsi_instance_t g_mipi_dsi0;
 
 /* Access the MIPI DSI instance using these structures when calling API functions directly (::p_api is not used). */
-extern mipi_dsi_instance_ctrl_t g_mipi_dsi_ctrl;
-extern const mipi_dsi_cfg_t g_mipi_dsi_cfg;
+extern mipi_dsi_instance_ctrl_t g_mipi_dsi0_ctrl;
+extern const mipi_dsi_cfg_t g_mipi_dsi0_cfg;
 
 #ifndef mipi_dsi_callback
 void mipi_dsi_callback(mipi_dsi_callback_args_t *p_args);
@@ -57,20 +57,20 @@ extern const display_cfg_t g_display_cfg;
 void glcdc_callback(display_callback_args_t *p_args);
 #endif
 
-#define DISPLAY_IN_FORMAT_16BITS_RGB565_0
+#define DISPLAY_IN_FORMAT_32BITS_RGB888_0
 #if defined (DISPLAY_IN_FORMAT_32BITS_RGB888_0) || defined (DISPLAY_IN_FORMAT_32BITS_ARGB8888_0)
-            #define DISPLAY_BITS_PER_PIXEL_INPUT0 (32)
-            #elif defined (DISPLAY_IN_FORMAT_16BITS_RGB565_0) || defined (DISPLAY_IN_FORMAT_16BITS_ARGB1555_0) || defined (DISPLAY_IN_FORMAT_16BITS_ARGB4444_0)
-#define DISPLAY_BITS_PER_PIXEL_INPUT0 (16)
-#elif defined (DISPLAY_IN_FORMAT_CLUT8_0)
+#define DISPLAY_BITS_PER_PIXEL_INPUT0 (32)
+#elif defined (DISPLAY_IN_FORMAT_16BITS_RGB565_0) || defined (DISPLAY_IN_FORMAT_16BITS_ARGB1555_0) || defined (DISPLAY_IN_FORMAT_16BITS_ARGB4444_0)
+            #define DISPLAY_BITS_PER_PIXEL_INPUT0 (16)
+            #elif defined (DISPLAY_IN_FORMAT_CLUT8_0)
             #define DISPLAY_BITS_PER_PIXEL_INPUT0 (8)
             #elif defined (DISPLAY_IN_FORMAT_CLUT4_0)
             #define DISPLAY_BITS_PER_PIXEL_INPUT0 (4)
             #else
             #define DISPLAY_BITS_PER_PIXEL_INPUT0 (1)
             #endif
-#define DISPLAY_HSIZE_INPUT0                 (480)
-#define DISPLAY_VSIZE_INPUT0                 (854)
+#define DISPLAY_HSIZE_INPUT0                 (1280)
+#define DISPLAY_VSIZE_INPUT0                 (720)
 #define DISPLAY_BUFFER_STRIDE_BYTES_INPUT0   (((DISPLAY_HSIZE_INPUT0 * DISPLAY_BITS_PER_PIXEL_INPUT0 + 0x1FF) >> 9) << 6)
 #define DISPLAY_BUFFER_STRIDE_PIXELS_INPUT0  ((DISPLAY_BUFFER_STRIDE_BYTES_INPUT0 * 8) / DISPLAY_BITS_PER_PIXEL_INPUT0)
 #if GLCDC_CFG_LAYER_1_ENABLE
@@ -89,8 +89,8 @@ void glcdc_callback(display_callback_args_t *p_args);
             #else
             #define DISPLAY_BITS_PER_PIXEL_INPUT1 (1)
             #endif
-#define DISPLAY_HSIZE_INPUT1                 (480)
-#define DISPLAY_VSIZE_INPUT1                 (854)
+#define DISPLAY_HSIZE_INPUT1                 (720)
+#define DISPLAY_VSIZE_INPUT1                 (720)
 #define DISPLAY_BUFFER_STRIDE_BYTES_INPUT1   (((DISPLAY_HSIZE_INPUT1 * DISPLAY_BITS_PER_PIXEL_INPUT1 + 0x1FF) >> 9) << 6)
 #define DISPLAY_BUFFER_STRIDE_PIXELS_INPUT1  ((DISPLAY_BUFFER_STRIDE_BYTES_INPUT1 * 8) / DISPLAY_BITS_PER_PIXEL_INPUT1)
 #if GLCDC_CFG_LAYER_2_ENABLE

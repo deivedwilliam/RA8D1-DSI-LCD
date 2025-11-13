@@ -177,7 +177,7 @@ FSP Configuration
     PLL2Q Div /2
     PLL2R Div /2
     Clock Src: PLL1P
-    CLKOUT Disabled
+    CLKOUT Src: LOCO
     SCICLK Src: PLL1P
     SPICLK Disabled
     CANFDCLK Disabled
@@ -201,7 +201,7 @@ FSP Configuration
     SCICLK Div /4
     SPICLK Div /4
     CANFDCLK Div /8
-    LCDCLK Div /4
+    LCDCLK Div /2
     I3CCLK Div /3
     USBCLK Div /1
     USB60CLK Div /8
@@ -244,7 +244,7 @@ FSP Configuration
       P113 90 SDRAM_CKE - H - "Peripheral mode" - - "BUS: CS1#; ETHER_MII: ET0_EXOUT; ETHER_RMII: ET0_EXOUT; GLCD: LCD_DATA9; GPT2: GTIOC2A; SCI0: RXD0; SDRAM: CKE; SPI0: SSLA1; SSIE: SSIFS0; SSIE: SSILRCK0; ULPT0: ULPTOA0_A-DS" - O - - 
       P114 91 SDRAM_WE - H - "Peripheral mode" - - "BUS: CS0#; ETHER_MII: ET0_LINKSTA; ETHER_RMII: ET0_LINKSTA; GLCD: LCD_DATA8; GPT2: GTIOC2B; SCI0: CTS_RTS0; SCI0: DE0; SDRAM: WE; SPI0: SSLA0; SSIE0: SSIRXD0" - O - - 
       P115 92 SDRAM_SDCS - H - "Peripheral mode" - - "ETHER_MII: ET0_WOL; ETHER_RMII: ET0_WOL; GLCD: LCD_DATA7; GPT5: GTIOC5A; SCI0: CTS0; SDRAM: SDCS; SPI0: MOSI0; SSIE0: SSITXD0" - O - - 
-      P200 68 GPIO MIPI_SELECT - - "Output mode (Initial Low)" - - "IRQ: NMI" - IO - - 
+      P200 68 GPIO DEAD_PIN - None "Input mode" - - "IRQ: NMI" - IO - - 
       P201 67 - - - - Disabled - - "SYSTEM: MD" - None - - 
       P206 49 MIPI_DSI_TE - L None "Peripheral mode" - - "BUS: CS7#; GPT_OPS: GTIU; IIC1: SDA1; IRQ0: IRQ0-DS; MIPI: DSI_TE; SCI4: RXD4; SDHI0: SD0DAT2; SPI0: SSLA2; SSIE1: SSIDATA1; USB FS: USB_VBUSEN" - IO - - 
       P208 65 JTAG/SWD_TDI - L None "Peripheral mode" - - "CANFD1: CRX1; CLKOUT: VCOUT; GPT1: GTIOC1B; GPT_OPS: GTOVLO; IRQ3: IRQ3; JTAG/SWD: TDI; SCI9: RXD9" - IO - - 
@@ -278,7 +278,7 @@ FSP Configuration
       P409 42 IIC0_SDA0 - M None "Peripheral mode" - - "BUS: A18; GPT_OPS: GTOWUP; IIC0: SDA0; IRQ6: IRQ6; SCI3: TXD3; ULPT0: ULPTOA0; USB FS: USB_OVRCURA_A-DS; USB HS: USBHS_OVRCURA" - IO - - 
       P410 41 IIC0_SCL0 - M None "Peripheral mode" - - "AGT1: AGTOB1; BUS: A19; GPT9: GTIOC9B; GPT_OPS: GTOVLO; IIC0: SCL0; IRQ5: IRQ5; SCI3: DE3; SCI3: SCK3; SDHI0: SD0DAT1; SPI1: MISO1; USB FS: USB_OVRCURB_A-DS; USB HS: USBHS_OVRCURB" - IO - - 
       P411 40 GPIO LED_STATE L - "Output mode (Initial Low)" - - "AGT1: AGTOA1; BUS: A20; GPT9: GTIOC9A; GPT_OPS: GTOVUP; IRQ4: IRQ4; SCI3: CTS_RTS3; SCI3: DE3; SDHI0: SD0DAT0; SPI1: MOSI1; USB FS: USB_ID; USB HS: USBHS_ID" - IO - - 
-      P412 39 - - - - Disabled - - "AGT1: AGTEE1; BUS: A21; GPT_OPS: GTOULO; SCI3: CTS3; SDHI0: SD0CMD; SPI1: RSPCK1; USB FS: USB_EXICEN; USB HS: USBHS_EXICEN" - None - - 
+      P412 39 GPIO DSI_DEST_SELECT L - "Output mode (Initial Low)" - - "AGT1: AGTEE1; BUS: A21; GPT_OPS: GTOULO; SCI3: CTS3; SDHI0: SD0CMD; SPI1: RSPCK1; USB FS: USB_EXICEN; USB HS: USBHS_EXICEN" - IO - - 
       P413 38 - - - - Disabled - - "BUS: A22; GPT_OPS: GTOUUP; SDHI0: SD0CLK; SPI1: SSLB0; ULPT1: ULPTEE1" - None - - 
       P414 37 SCI4_RXD4 UART4_RX L None "Peripheral mode" - - "BUS: A23; CANFD1: CRX1; CEU: VIO_D13; GPT0: GTIOC0B; GPT_OPS: GTADSM1; IRQ9: IRQ9; SCI4: RXD4; SDHI0: SD0WP; SPI1: SSLB1" - I - - 
       P415 36 SCI4_TXD4 UART4_TX L None "Peripheral mode" - - "BUS: WAIT; CANFD1: CTX1; CEU: VIO_D12; GPT0: GTIOC0A; GPT_OPS: GTADSM0; IRQ8: IRQ8; SCI4: TXD4; SDHI0: SD0CD; SPI1: SSLB2" - O - - 
@@ -429,26 +429,26 @@ FSP Configuration
     Instance "g_display Graphics LCD (r_glcdc)"
       General: Name: g_display
       Interrupts: Callback Function: glcdc_callback
-      Interrupts: Line Detect Interrupt Priority: Priority 12
+      Interrupts: Line Detect Interrupt Priority: Priority 1
       Interrupts: Underflow 1 Interrupt Priority: Disabled
       Interrupts: Underflow 2 Interrupt Priority: Disabled
       Input: Graphics Layer 1: General: Enabled: Yes
-      Input: Graphics Layer 1: General: Horizontal size: 480
-      Input: Graphics Layer 1: General: Vertical size: 854
+      Input: Graphics Layer 1: General: Horizontal size: 1280
+      Input: Graphics Layer 1: General: Vertical size: 720
       Input: Graphics Layer 1: General: Horizontal position: 0
       Input: Graphics Layer 1: General: Vertical position: 0
       Input: Graphics Layer 1: Framebuffer: Framebuffer name: fb_background
       Input: Graphics Layer 1: Framebuffer: Number of framebuffers: 2
       Input: Graphics Layer 1: Framebuffer: Section for framebuffer allocation: .sdram_noinit
-      Input: Graphics Layer 1: General: Color format: RGB565 (16-bit)
+      Input: Graphics Layer 1: General: Color format: RGB888 (32-bit)
       Input: Graphics Layer 1: General: Line descending mode: Disabled
       Input: Graphics Layer 1: Line Repeat: Enable: Off
       Input: Graphics Layer 1: Line Repeat: Repeat count: 0
       Input: Graphics Layer 1: Fading: Mode: None
       Input: Graphics Layer 1: Fading: Speed: 0
       Input: Graphics Layer 2: General: Enabled: No
-      Input: Graphics Layer 2: General: Horizontal size: 480
-      Input: Graphics Layer 2: General: Vertical size: 854
+      Input: Graphics Layer 2: General: Horizontal size: 720
+      Input: Graphics Layer 2: General: Vertical size: 720
       Input: Graphics Layer 2: General: Horizontal position: 0
       Input: Graphics Layer 2: General: Vertical position: 0
       Input: Graphics Layer 2: Framebuffer: Framebuffer name: fb_foreground
@@ -460,25 +460,25 @@ FSP Configuration
       Input: Graphics Layer 2: Line Repeat: Repeat count: 0
       Input: Graphics Layer 2: Fading: Mode: None
       Input: Graphics Layer 2: Fading: Speed: 0
-      Output: Timing: Horizontal total cycles: 800
-      Output: Timing: Horizontal active video cycles: 640
-      Output: Timing: Horizontal back porch cycles: 80
-      Output: Timing: Horizontal sync signal cycles: 64
-      Output: Timing: Horizontal sync signal polarity: Low active
-      Output: Timing: Vertical total lines: 500
-      Output: Timing: Vertical active video lines: 480
-      Output: Timing: Vertical back porch lines: 13
-      Output: Timing: Vertical sync signal lines: 4
+      Output: Timing: Horizontal total cycles: 1650
+      Output: Timing: Horizontal active video cycles: 1280
+      Output: Timing: Horizontal back porch cycles: 220
+      Output: Timing: Horizontal sync signal cycles: 40
+      Output: Timing: Horizontal sync signal polarity: High active
+      Output: Timing: Vertical total lines: 750
+      Output: Timing: Vertical active video lines: 720
+      Output: Timing: Vertical back porch lines: 20
+      Output: Timing: Vertical sync signal lines: 5
       Output: Timing: Vertical sync signal polarity: High active
       Output: Timing: Data Enable Signal Polarity: High active
-      Output: Timing: Sync edge: Falling edge
+      Output: Timing: Sync edge: Rising edge
       Output: Format: Color format: 24bits RGB888
       Output: Format: Color order: RGB
       Output: Format: Endian: Little endian
       Output: Background: Alpha: 255
       Output: Background: Red: 0
       Output: Background: Green: 0
-      Output: Background: Blue: 0
+      Output: Background: Blue: 255
       CLUT: Enabled: No
       CLUT: Size: 256
       TCON: Hsync pin select: LCD_TCON1
@@ -599,13 +599,13 @@ FSP Configuration
       Dithering: Pattern C: Pattern 11
       Dithering: Pattern D: Pattern 11
       
-      Instance "g_mipi_dsi MIPI Display (r_mipi_dsi)"
-        General: Name: g_mipi_dsi
+      Instance "g_mipi_dsi0 MIPI Display (r_mipi_dsi)"
+        General: Name: g_mipi_dsi0
         Options: LCD External Clock Hz: 0
         Low Power: Ultra Low Power State Wakeup Period (us): 1000
         Clock Lane: Continuous Mode: Enable
         Data Lane: Number of Data Lanes: 2
-        Video Mode: Pixel Packet: Sync Pulse: HSE and VSE are transmitted
+        Video Mode: Pixel Packet: Sync Pulse: HSE and VSE are not transmitted
         Video Mode: Pixel Packet: Virtual Channel ID: 0
         Video Mode: Delay Override (0 to disable): 0
         Video Mode: Prevent LP Transition: 
@@ -640,7 +640,7 @@ FSP Configuration
         
         Instance "g_mipi_phy0 MIPI Physical Layer (r_mipi_phy)"
           General: Name: g_mipi_phy0
-          DSI PLL Frequency (MHz): 1000.00
+          DSI PLL Frequency (MHz): 900
           Timing: LP Clock Divider: 5
           Timing: TINIT (ns): 600000
           Timing: THSPREP: ns: 40

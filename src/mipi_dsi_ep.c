@@ -7,11 +7,10 @@
 
 
 #include "mipi_dsi_ep.h"
-#include "r_mipi_dsi_api.h"
-#include "common_utils.h"
-
-
+#include "r_mipi_dsi.h"
 #include "hal_data.h"
+#include "common_utils.h"
+#include "lontium_bridge_lt8912.h"
 
 /* Flag volátil para sinalizar a conclusão de um comando DSI */
 static volatile mipi_dsi_event_t g_dsi_event_flag;
@@ -31,6 +30,7 @@ volatile bool g_message_sent = RESET_FLAG;
 volatile bool g_ulps_flag = RESET_FLAG;
 volatile bool g_irq_state = RESET_FLAG;
 volatile bool g_timer_overflow = RESET_FLAG;
+static void display_draw (uint32_t * framebuffer);
 
 //coord_t touch_coordinates[5];
 //timer_info_t timer_info = { .clock_frequency = RESET_VALUE, .count_direction = RESET_VALUE, .period_counts = RESET_VALUE };
@@ -82,22 +82,25 @@ static void lcd_init_from_table (const lcd_table_setting_t *table){
     while (p_entry->cmd_id != MIPI_DSI_DISPLAY_CONFIG_DATA_END_OF_TABLE){
         mipi_dsi_cmd_t msg = {
              .channel = 0,
-             .cmd_id = (mipi_dsi_cmd_id_t) p_entry->cmd_id,
+             .cmd_id = p_entry->cmd_id,
              .flags = p_entry->flags,
              .tx_len = p_entry->size,
              .p_tx_buffer = p_entry->buffer,
         };
 
-        if ((mipi_dsi_cmd_id_t)MIPI_DSI_DISPLAY_CONFIG_DATA_DELAY_FLAG == msg.cmd_id)
+        if (MIPI_DSI_DISPLAY_CONFIG_DATA_DELAY_FLAG == msg.cmd_id)
         {
-            R_BSP_SoftwareDelay (table->size, BSP_DELAY_UNITS_MILLISECONDS);
+            printf("DelayMs: %i\r\n", p_entry->size);
+            R_BSP_SoftwareDelay (p_entry->size, BSP_DELAY_UNITS_MILLISECONDS);
         }
         else
         {
             g_message_sent = false;
             /* Send a command to the peripheral device */
-            err = R_MIPI_DSI_Command (&g_mipi_dsi_ctrl, &msg);
-            printf("%d: ** MIPI DSI Command API failed ** \r\n", (int)err);
+            err = R_MIPI_DSI_Command (&g_mipi_dsi0_ctrl, &msg);
+            if(err != FSP_SUCCESS) {
+                printf("%d: ** MIPI DSI Command API failed ** \r\n", (int)err);
+            }
             /* Wait */
             while (!g_message_sent);
         }
@@ -138,6 +141,47 @@ void mipi_dsi_callback(mipi_dsi_callback_args_t *p_args)
 }
 
 /*******************************************************************************************************************//**
+ * @brief       This function is used to Wait for mipi dsi event.
+ *
+ * @param[in]   event   : Expected events
+ * @retval      FSP_SUCCESS : Upon successful operation, otherwise: failed
+ **********************************************************************************************************************/
+static fsp_err_t wait_for_mipi_dsi_event (mipi_dsi_phy_status_t event)
+{
+    uint32_t timeout = R_FSP_SystemClockHzGet(FSP_PRIV_CLOCK_ICLK) / 10;
+    while (--timeout && ((g_phy_status & event) != event))
+    {
+        ;
+    }
+    return timeout ? FSP_SUCCESS : FSP_ERR_TIMEOUT;
+}
+
+/*******************************************************************************************************************//**
+ * @brief      This function is used to exit Ultra-low Power State (ULPS) and turn on the backlight.
+ *
+ * @param[in]  none
+ * @retval     none
+ **********************************************************************************************************************/
+static void mipi_dsi_ulps_exit(void)
+{
+    fsp_err_t err = FSP_SUCCESS;
+    /* Exit Ultra-low Power State (ULPS) */
+    g_phy_status = MIPI_DSI_PHY_STATUS_NONE;
+    err = R_MIPI_DSI_UlpsExit (&g_mipi_dsi0_ctrl, (mipi_dsi_lane_t) (MIPI_DSI_LANE_DATA_ALL));
+   if(err != FSP_SUCCESS){
+       printf ("** %i MIPI DSI UlpsExit API failed ** \r\n", err);
+   }
+
+
+    /* Wait for a ULPS event */
+    err = wait_for_mipi_dsi_event(MIPI_DSI_PHY_STATUS_DATA_LANE_ULPS_EXIT);
+    if(err != FSP_SUCCESS){
+        printf("** MIPI DSI phy event timeout ** Code: %i\r\n", err);
+    }
+    g_ulps_flag = RESET_FLAG;
+ }
+
+/*******************************************************************************************************************//**
  * @brief      Start video mode and draw color bands on the LCD screen
  *
  * @param[in]  None.
@@ -151,9 +195,13 @@ void mipi_dsi_start_display(void){
     g_vr_size = (g_display_cfg.input[0].vsize);
     g_hstride = (g_display_cfg.input[0].hstride);
 
+    printf("Width: %i\r\n", g_hz_size);
+    printf("Height: %i\r\n", g_vr_size);
+
     /* Initialize buffer pointers */
     g_buffer_size = (uint32_t) (g_hz_size * g_vr_size * BYTES_PER_PIXEL);
     gp_single_buffer = (uint32_t*) g_display_cfg.input[0].p_base;
+
 
     /* Double buffer for drawing color bands with good quality */
     gp_double_buffer = gp_single_buffer + g_buffer_size;
@@ -165,21 +213,26 @@ void mipi_dsi_start_display(void){
 
     /* Start video mode */
     err = R_GLCDC_Start(&g_display_ctrl);
+    if(err != FSP_SUCCESS){
+        printf("**%i GLCDC Start API failed ** \r\n", err);
+    }
+
+//    display_draw (gp_single_buffer);
     /* Handle error */
-    handle_error(err, "** GLCDC Start API failed ** \r\n");
+//    mipi_dsi_ulps_exit();
 
 //    /* Enable external interrupt */
 //    err = R_ICU_ExternalIrqEnable(&g_external_irq_ctrl);
 //    /* Handle error */
 //    handle_error(err, "** ICU ExternalIrqEnable API failed ** \r\n");
-
+  //  mipi_dsi_ulps_exit();
     while (true){
 
-        uint8_t StatusRegister = RESET_VALUE;
-        bool touch_flag = RESET_FLAG;
+//        uint8_t StatusRegister = RESET_VALUE;
+//        bool touch_flag = RESET_FLAG;
 
         /* User selects time to enter ULPS  */
-        err = mipi_dsi_set_display_time ();
+//        err = mipi_dsi_set_display_time ();
 //        printf (err, "** mipi_dsi_set_display_time function failed ** \r\n");
 
 //        if (g_irq_state)
@@ -201,26 +254,26 @@ void mipi_dsi_start_display(void){
 //                handle_error (err, "** GPT Reset API failed ** \r\n");
 //            }
 //        }
-        if (g_ulps_flag)
-        {
+//        if (g_ulps_flag)
+//        {
+//
+//            if (touch_flag || g_timer_overflow)
+//            {
+//                /* Exit Ultra-low Power State (ULPS) and turn on the backlight */
 
-            if (touch_flag || g_timer_overflow)
-            {
-                /* Exit Ultra-low Power State (ULPS) and turn on the backlight */
-                mipi_dsi_ulps_exit();
-
-                /* Reset g_timer_overflow flag */
-                g_timer_overflow = RESET_FLAG;
-                /* Set display time */
-                err = timer_period_set(period_sec);
-                /* Handle error */
-                handle_error(err, "** Timer period set failed ** \r\n");
-            }
-        }
-        else
-        {
-            if (!g_timer_overflow)
-            {
+//
+//                /* Reset g_timer_overflow flag */
+//                g_timer_overflow = RESET_FLAG;
+//                /* Set display time */
+//                err = timer_period_set(period_sec);
+//                /* Handle error */
+//                handle_error(err, "** Timer period set failed ** \r\n");
+//            }
+//        }
+//        else
+//        {
+//            if (!g_timer_overflow)
+//            {
                 /* Swap the active framebuffer */
                 gp_frame_buffer = (gp_frame_buffer == gp_single_buffer) ? gp_double_buffer : gp_single_buffer;
 
@@ -229,14 +282,20 @@ void mipi_dsi_start_display(void){
 
                 /* Now that the framebuffer is ready, update the GLCDC buffer pointer on the next Vsync */
                 err = R_GLCDC_BufferChange (&g_display_ctrl, (uint8_t*) gp_frame_buffer, DISPLAY_FRAME_LAYER_1);
-                handle_error (err, "** GLCD BufferChange API failed ** \r\n");
+
+                if(err != FSP_SUCCESS){
+                    printf("**%i GLCD BufferChange API failed ** \r\n", err);
+                }
+
 
                 /* Wait for a Vsync event */
                 g_vsync_flag = RESET_FLAG;
                 while (RESET_FLAG == g_vsync_flag);
-            }
-            else
-            {
+                R_BSP_SoftwareDelay(200, BSP_DELAY_UNITS_MILLISECONDS);
+                printf("HDP: %i\r\n", LT8912_Get_HPD());
+//            }
+//            else
+//            {
 //                g_timer_overflow = RESET_FLAG;
 //                /* Enter Ultra-low Power State (ULPS) and turn off the backlight */
 //                mipi_dsi_ulps_enter();
@@ -244,8 +303,8 @@ void mipi_dsi_start_display(void){
 //                err = timer_period_set(ULPS_EXIT_PERIOD_30SEC);
 //                /* Handle error */
 //                handle_error(err, "** Timer period set failed ** \r\n");
-            }
-        }
+//            }
+//        }
     }
 }
 
@@ -262,7 +321,10 @@ void mipi_dsi_entry(void)
     /* Initialize GLCDC module */
     err = R_GLCDC_Open(&g_display_ctrl, &g_display_cfg);
     /* Handle error */
-    handle_error(err, "** GLCDC driver initialization FAILED ** \r\n");
+    if(err != FSP_SUCCESS){
+        printf("**%i GLCDC driver initialization FAILED ** \r\n", err);
+    }
+    R_MIPI_DSI_Open(&g_mipi_dsi0_ctrl, &g_mipi_dsi0_cfg);
 
 //    /* Initialize GPT module */
 //    err = R_GPT_Open(&g_timer0_ctrl, &g_timer0_cfg);
@@ -278,7 +340,7 @@ void mipi_dsi_entry(void)
 //    handle_error(err, "** IIC MASTER Open API failed ** \r\n");
 
     /* Initialize LCD. */
-    lcd_init_from_table(g_lcd_init_focuslcd);
+//    lcd_init_from_table(g_lcd_init_focuslcd);
 
     /* Initialize ICU module */
 //    err = R_ICU_ExternalIrqOpen(&g_external_irq_ctrl, &g_external_irq_cfg);
@@ -288,6 +350,29 @@ void mipi_dsi_entry(void)
     /* Start display 8-color bars */
     mipi_dsi_start_display();
 }
+
+/*******************************************************************************************************************//**
+ * @brief      User-defined function to draw the current display to a framebuffer.
+ *
+ * @param[in]  framebuffer    Pointer to frame buffer.
+ * @retval     None.
+ **********************************************************************************************************************/
+static void display_draw (uint32_t * framebuffer)
+{
+    /* Draw buffer */
+    uint32_t color[COLOR_BAND_COUNT]= {BLUE, LIME, RED, BLACK, WHITE, YELLOW, AQUA, MAGENTA};
+    uint16_t bit_width = g_hz_size / COLOR_BAND_COUNT;
+    for (uint32_t y = 0; y < g_vr_size; y++)
+    {
+        for (uint32_t x = 0; x < g_hz_size; x ++)
+        {
+            uint32_t bit       = x / bit_width;
+            framebuffer[x] = color [bit];
+        }
+        framebuffer += g_hstride;
+    }
+}
+
 
 /*******************************************************************************************************************//**
  *  @brief       This function handles errors, closes all opened modules, and prints errors.

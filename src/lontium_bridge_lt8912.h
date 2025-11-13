@@ -8,6 +8,9 @@
 #ifndef LONTIUM_BRIDGE_LT8912_H_
 #define LONTIUM_BRIDGE_LT8912_H_
 
+#include "stdbool.h"
+#include "hal_entry.h"
+#include "hal_data.h"
 
 #define EDID_ADDR 0x50
 #define LT8912_REG_CHIP_REVISION_0          (0x00)
@@ -67,6 +70,12 @@
 #define HDMI_MODE_720P   0
 #define HDMI_MODE_1080P  1
 
+#define AR_ND       0x00
+#define AR_4_3      0x01
+#define AR_16_9     0x02
+
+
+
 static int hdmi_connected = 0;
 
 enum lt8912_i2c_addr {
@@ -74,6 +83,76 @@ enum lt8912_i2c_addr {
     I2C_ADDR_CEC_DSI = 0x49,
     I2C_ADDR_I2S = 0x4a,
 };
+
+
+typedef struct video_timing{
+    uint16_t hfp;
+    uint16_t hs;
+    uint16_t hbp;
+    uint16_t hact;
+    uint16_t htotal;
+    uint16_t vfp;
+    uint16_t vs;
+    uint16_t vbp;
+    uint16_t vact;
+    uint16_t vtotal;
+    _Bool h_polarity;
+    _Bool v_polarity;
+    uint16_t vic;
+    uint16_t aspact_ratio;  // 0=no data, 1=4:3, 2=16:9, 3=no data.
+    uint32_t pclk_khz;
+}_video_timing;
+
+typedef struct panel_parameter
+{
+        uint16_t hfp;
+        uint16_t hs;
+        uint16_t hbp;
+        uint16_t hact;
+        uint16_t htotal;
+        uint16_t vfp;
+        uint16_t vs;
+        uint16_t vbp;
+        uint16_t vact;
+        uint16_t vtotal;
+        uint16_t pclk_khz;
+}_panel_parameter;
+
+extern uint8_t Tx_HPD;
+
+void DigitalClockEn(void);
+void TxAnalog(void);
+void CbusAnalog(void);
+void HDMIPllAnalog(void);
+void AviInfoframe(struct video_timing *video_format);
+void MipiAnalog(void);
+void MipiBasicSet();
+void MIPI_Video_Setup(struct video_timing *video_format);
+void MIPIRxLogicRes(void);
+void DDSConfig(void);
+void AudioIIsEn(void);
+void AudioSpdifEn(void);
+void Core_Pll_setup(struct panel_parameter *panel);
+void Core_Pll_bypass(void);
+void Lvds_Pll_Reset(void);
+void Scaler_bypass(void);
+void Scaler_setup(struct video_timing *input_video,struct panel_parameter *panel);
+void LvdsPowerUp(void);
+void LvdsPowerDown(void);
+void LvdsBypass(void);
+void LvdsOutput(_Bool on);
+void HdmiOutput(_Bool on);
+void LvdsScalerResult(void);
+void ScalerReset(void);
+void lt8912_check_dds(void);
+void lvds_output_cfg(void);
+void MIPI_Input_det(void);
+void pattern_test(void);
+uint8_t LT8912_Get_HPD(void);
+uint16_t LT8912B_GetChipID(void);
+void LT8912B_Suspend(_Bool on);
+void LT8912B_Config(void);
+void HDMI_Test_Pattern(void);
 
 
 #endif /* LONTIUM_BRIDGE_LT8912_H_ */

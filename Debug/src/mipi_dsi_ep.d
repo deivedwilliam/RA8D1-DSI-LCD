@@ -54,10 +54,9 @@ src/mipi_dsi_ep.o: ../src/mipi_dsi_ep.c ../src/mipi_dsi_ep.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_mipi_dsi_cfg.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_phy.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_mipi_cmd_types.h \
- ../src/common_utils.h \
+ C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_dsi.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/hal_data.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/common_data.h \
- C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_dsi.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_glcdc.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_display_api.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_ioport.h \
@@ -70,7 +69,8 @@ src/mipi_dsi_ep.o: ../src/mipi_dsi_ep.c ../src/mipi_dsi_ep.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_sci_b_uart_cfg.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_iic_master.h \
  C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_iic_master_cfg.h \
- C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_i2c_master_api.h
+ C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_i2c_master_api.h \
+ ../src/common_utils.h
 ../src/mipi_dsi_ep.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_mipi_dsi_api.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/bsp_api.h:
@@ -127,10 +127,9 @@ C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_mipi_cmd_type
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_mipi_dsi_cfg.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_phy.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_mipi_cmd_types.h:
-../src/common_utils.h:
+C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_dsi.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/hal_data.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_gen/common_data.h:
-C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_mipi_dsi.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_glcdc.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_display_api.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_ioport.h:
@@ -144,3 +143,4 @@ C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_sci_b_uart_cf
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/instances/r_iic_master.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra_cfg/fsp_cfg/r_iic_master_cfg.h:
 C:/Users/Deived/e2_studio/workspace/dsi_ai_vision/ra/fsp/inc/api/r_i2c_master_api.h:
+../src/common_utils.h:
