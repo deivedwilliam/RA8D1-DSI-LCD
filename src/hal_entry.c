@@ -48,9 +48,9 @@ void hal_entry(void)
     R_BSP_PinWrite(DSI_DEST_SELECT, BSP_IO_LEVEL_LOW);
 
 //    LT8912B_Config();
-
+//    pattern_test();
     HDMI_Test_Pattern();
-    mipi_dsi_entry();
+//    mipi_dsi_entry();
 
 
    for(;;){

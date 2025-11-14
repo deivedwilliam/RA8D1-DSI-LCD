@@ -409,7 +409,7 @@
       <property id="module.driver.display.tcon_vsync" value="module.driver.display.tcon_vsync.tcon_pin_0"/>
       <property id="module.driver.display.tcon_de" value="module.driver.display.tcon_de.tcon_pin_2"/>
       <property id="module.driver.display.clksrc" value="module.driver.display.clksrc.clk_src_internal"/>
-      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_8"/>
+      <property id="module.driver.display.clock_div_ratio" value="module.driver.display.clock_div_ratio.panel_clk_divisor_3"/>
       <property id="module.driver.display.correction_proc_order" value="module.driver.display.correction_proc_order.correction_proc_order_brightness_contrast2gamma"/>
       <property id="module.driver.display.output.brightness.enable" value="module.driver.display.output.brightness.false"/>
       <property id="module.driver.display.output.brightness.r" value="512"/>
@@ -548,7 +548,7 @@
       <property id="module.driver.mipi_dsi.p_callback" value="mipi_dsi_callback"/>
       <property id="module.driver.mipi_dsi.p_context" value="NULL"/>
       <property id="module.driver.mipi_dsi.scramble" value="module.driver.mipi_dsi.scramble.disable"/>
-      <property id="module.driver.mipi_dsi.dsisetr_b.eotpen" value="module.driver.mipi_dsi.dsisetr_b.eotpen.enable"/>
+      <property id="module.driver.mipi_dsi.dsisetr_b.eotpen" value="module.driver.mipi_dsi.dsisetr_b.eotpen.disable"/>
       <property id="module.driver.mipi_dsi.ecc_enable" value="module.driver.mipi_dsi.ecc_enable.enable"/>
       <property id="module.driver.mipi_dsi.crc_enable_mask" value=""/>
       <property id="module.driver.mipi_dsi.mrpsz" value="1"/>

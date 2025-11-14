@@ -34,12 +34,13 @@ void DigitalClockEn(void){
     // Endereço 0x90 -> 0x48 (7-bit)
     uint8_t device_address = 0x48;
 
-    I2C_WriteByte(device_address, 0x02, 0xf7);
     I2C_WriteByte(device_address, 0x08, 0xff);
     I2C_WriteByte(device_address, 0x09, 0xff);
     I2C_WriteByte(device_address, 0x0a, 0xff);
     I2C_WriteByte(device_address, 0x0b, 0x7c);
     I2C_WriteByte(device_address, 0x0c, 0xff);
+//    I2C_WriteByte(device_address, 0x02, 0xf7);
+    I2C_WriteByte(device_address, 0x42, 0x04);
 }
 
 
@@ -47,9 +48,16 @@ void TxAnalog(void){
     // Endereço 0x90 -> 0x48 (7-bit)
     uint8_t device_address = 0x48;
 
-    I2C_WriteByte(device_address, 0x31, 0xE1);
-    I2C_WriteByte(device_address, 0x32, 0xE1);
-    I2C_WriteByte(device_address, 0x33, 0x0c); // en/disable HDMI output
+//    I2C_WriteByte(device_address, 0x31, 0xE1);
+//    I2C_WriteByte(device_address, 0x32, 0xE1);
+//    I2C_WriteByte(device_address, 0x33, 0x0c); // en/disable HDMI output
+//    I2C_WriteByte(device_address, 0x37, 0x00);
+//    I2C_WriteByte(device_address, 0x38, 0x22);
+//    I2C_WriteByte(device_address, 0x60, 0x82);
+
+    I2C_WriteByte(device_address, 0x31, 0xB1);
+    I2C_WriteByte(device_address, 0x32, 0xB1);
+    I2C_WriteByte(device_address, 0x33, 0x0E); // en/disable HDMI output
     I2C_WriteByte(device_address, 0x37, 0x00);
     I2C_WriteByte(device_address, 0x38, 0x22);
     I2C_WriteByte(device_address, 0x60, 0x82);
@@ -113,9 +121,10 @@ void MipiAnalog(void){
 #else
     I2C_WriteByte(device_address, 0x3e, 0xd6); // if MIPI pin map follows reference design, no swap needed
 #endif
-
-    I2C_WriteByte(device_address, 0x3f, 0xd4); // EQ
+    I2C_WriteByte(device_address, 0x3f, 0xd4);
     I2C_WriteByte(device_address, 0x41, 0x3c); // EQ
+    I2C_WriteByte(device_address, 0xB2, 0x00); // EQ
+//    I2C_WriteByte(device_address, 0x3f, 0xd4); // EQ
 }
 
 void MipiBasicSet(void){
@@ -124,7 +133,7 @@ void MipiBasicSet(void){
 
     I2C_WriteByte(device_address, 0x10, 0x01);    // term en
     I2C_WriteByte(device_address, 0x11, 0x10);    // settle
-    // I2C_WriteByte(device_address, 0x12, 0x08); // trail
+    I2C_WriteByte(device_address, 0x12, 0x04); // trail
     I2C_WriteByte(device_address, 0x13, lane_cnt); // 00 4 lane // 01 1 lane // 02 2 lane // 03 3lane
     I2C_WriteByte(device_address, 0x14, 0x00);     // debug mux
 
@@ -180,13 +189,63 @@ void MIPIRxLogicRes(void){
 void DDSConfig(void){
     // Endereço 0x92 -> 0x49 (7-bit)
     uint8_t device_address = 0x49;
+//
+//    I2C_WriteByte(device_address, 0x4e, 0x93); // strm_sw_freq_word[7:0]
+//    I2C_WriteByte(device_address, 0x4f, 0x3E); // strm_sw_freq_word[15:8]
+//    I2C_WriteByte(device_address, 0x50, 0x29); // strm_sw_freq_word[23:16]
+//    I2C_WriteByte(device_address, 0x51, 0x80); // [0]=strm_sw_freq_word[24]
+//
+//    I2C_WriteByte(device_address, 0x1e, 0x4f);
+//    I2C_WriteByte(device_address, 0x1f, 0x5e); // full_value 464
+//    I2C_WriteByte(device_address, 0x20, 0x01);
+//    I2C_WriteByte(device_address, 0x21, 0x2c); // full_value1 416
+//    I2C_WriteByte(device_address, 0x22, 0x01);
+//    I2C_WriteByte(device_address, 0x23, 0xfa); // full_value2 400
+//    I2C_WriteByte(device_address, 0x24, 0x00);
+//    I2C_WriteByte(device_address, 0x25, 0xc8); // full_value3 384
+//    I2C_WriteByte(device_address, 0x26, 0x00);
+//
+//    I2C_WriteByte(device_address, 0x27, 0x5e); // empty_value 464
+//    I2C_WriteByte(device_address, 0x28, 0x01);
+//    I2C_WriteByte(device_address, 0x29, 0x2c); // empty_value1 416
+//    I2C_WriteByte(device_address, 0x2a, 0x01);
+//    I2C_WriteByte(device_address, 0x2b, 0xfa); // empty_value2 400
+//    I2C_WriteByte(device_address, 0x2c, 0x00);
+//    I2C_WriteByte(device_address, 0x2d, 0xc8); // empty_value3 384
+//    I2C_WriteByte(device_address, 0x2e, 0x00);
+//
+//    I2C_WriteByte(device_address, 0x42, 0x64); // tmr_set[7:0]:100us
+//    I2C_WriteByte(device_address, 0x43, 0x00); // tmr_set[15:8]:100us
+//    I2C_WriteByte(device_address, 0x44, 0x04); // timer step
+//    I2C_WriteByte(device_address, 0x45, 0x00);
+//    I2C_WriteByte(device_address, 0x46, 0x59);
+//    I2C_WriteByte(device_address, 0x47, 0x00);
+//    I2C_WriteByte(device_address, 0x48, 0xf2);
+//    I2C_WriteByte(device_address, 0x49, 0x06);
+//    I2C_WriteByte(device_address, 0x4a, 0x00);
+//    I2C_WriteByte(device_address, 0x4b, 0x72);
+//    I2C_WriteByte(device_address, 0x4c, 0x45);
+//    I2C_WriteByte(device_address, 0x4d, 0x00);
+//
+//    I2C_WriteByte(device_address, 0x52, 0x08); // trend step
+//    I2C_WriteByte(device_address, 0x53, 0x00);
+//    I2C_WriteByte(device_address, 0x54, 0xb2);
+//    I2C_WriteByte(device_address, 0x55, 0x00);
+//    I2C_WriteByte(device_address, 0x56, 0xe4);
+//    I2C_WriteByte(device_address, 0x57, 0x0d);
+//    I2C_WriteByte(device_address, 0x58, 0x00);
+//    I2C_WriteByte(device_address, 0x59, 0xe4);
+//    I2C_WriteByte(device_address, 0x5a, 0x8a);
+//    I2C_WriteByte(device_address, 0x5b, 0x00);
+//    I2C_WriteByte(device_address, 0x5c, 0x34);
+//
+//    I2C_WriteByte(device_address, 0x51, 0x00);
 
-    I2C_WriteByte(device_address, 0x4e, 0x93); // strm_sw_freq_word[7:0]
-    I2C_WriteByte(device_address, 0x4f, 0x3E); // strm_sw_freq_word[15:8]
-    I2C_WriteByte(device_address, 0x50, 0x29); // strm_sw_freq_word[23:16]
+    I2C_WriteByte(device_address, 0x4e, 0xff); // strm_sw_freq_word[7:0]
+    I2C_WriteByte(device_address, 0x4f, 0x56); // strm_sw_freq_word[15:8]
+    I2C_WriteByte(device_address, 0x50, 0x69); // strm_sw_freq_word[23:16]
     I2C_WriteByte(device_address, 0x51, 0x80); // [0]=strm_sw_freq_word[24]
 
-    I2C_WriteByte(device_address, 0x1e, 0x4f);
     I2C_WriteByte(device_address, 0x1f, 0x5e); // full_value 464
     I2C_WriteByte(device_address, 0x20, 0x01);
     I2C_WriteByte(device_address, 0x21, 0x2c); // full_value1 416
@@ -230,6 +289,7 @@ void DDSConfig(void){
     I2C_WriteByte(device_address, 0x5b, 0x00);
     I2C_WriteByte(device_address, 0x5c, 0x34);
 
+    I2C_WriteByte(device_address, 0x1e, 0x4f);
     I2C_WriteByte(device_address, 0x51, 0x00);
 }
 
@@ -662,7 +722,7 @@ void pattern_test(void){
     // Saída HDMI e LVDS
     //////////////////////////////////////////////////////
     HdmiOutput(1);
-    LvdsOutput(1);
+//    LvdsOutput(1);
 }
 
 uint8_t LT8912_Get_HPD(void){
@@ -760,6 +820,7 @@ void LT8912B_Config(void)
         R_BSP_SoftwareDelay(300, BSP_DELAY_UNITS_MILLISECONDS);
     }
 #else
+    MIPIRxLogicRes();
     DigitalClockEn();
     TxAnalog();
     CbusAnalog();
@@ -768,7 +829,7 @@ void LT8912B_Config(void)
     MipiBasicSet();
     DDSConfig();
     MIPI_Video_Setup(&video_1280x720_60Hz);
-    MIPI_Input_det();
+//    MIPI_Input_det();
     AudioIIsEn();
     Core_Pll_setup(NULL);
 #ifdef dds_debug
@@ -874,7 +935,7 @@ void HDMI_Test_Pattern(void)
     I2C_WriteByte(device_address, 0x10, 0x20);  // Term enable: LP->HS mode
     I2C_WriteByte(device_address, 0x11, 0x04);  // Settle timing PRPR->SOT
     I2C_WriteByte(device_address, 0x12, 0x04);  // Trail
-    I2C_WriteByte(device_address, 0x13, 0x00);  // Lane config: 0=4 lanes
+    I2C_WriteByte(device_address, 0x13, 0x02);  // Lane config: 0=4 lanes
     I2C_WriteByte(device_address, 0x14, 0x00);  // Debug mux
     I2C_WriteByte(device_address, 0x15, 0x00);
     I2C_WriteByte(device_address, 0x1a, 0x03);  // Hshift

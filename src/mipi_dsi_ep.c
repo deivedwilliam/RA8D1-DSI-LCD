@@ -326,6 +326,8 @@ void mipi_dsi_entry(void)
     }
     R_MIPI_DSI_Open(&g_mipi_dsi0_ctrl, &g_mipi_dsi0_cfg);
 
+
+
 //    /* Initialize GPT module */
 //    err = R_GPT_Open(&g_timer0_ctrl, &g_timer0_cfg);
 //    /* Handle error */

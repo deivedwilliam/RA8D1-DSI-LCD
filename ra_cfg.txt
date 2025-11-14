@@ -485,7 +485,7 @@ FSP Configuration
       TCON: Vsync pin select: LCD_TCON0
       TCON: Data enable (DE) pin select: LCD_TCON2
       TCON: Panel clock source: Internal clock (GLCDCLK)
-      TCON: Panel clock division ratio: 1/8
+      TCON: Panel clock division ratio: 1/3
       Color Correction: Process order: Brightness/contrast first
       Color Correction: Brightness: Enabled: No
       Color Correction: Brightness: Red channel: 512
@@ -624,7 +624,7 @@ FSP Configuration
         Interrupts: Callback: mipi_dsi_callback
         Interrupts: Callback Context: NULL
         Options: Data Scramble Enable: Disable
-        Options: EoTP Enable: Enable
+        Options: EoTP Enable: Disable
         Options: ECC Check Enable: Enable
         Options: CRC Enable: 
         Options: Maximum Return Packet Size: 1

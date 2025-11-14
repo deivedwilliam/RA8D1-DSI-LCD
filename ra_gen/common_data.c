@@ -111,7 +111,7 @@ const mipi_dsi_cfg_t g_mipi_dsi0_cfg =
           .horizontal_front_porch = (1650 - 1280 - 220 - 40),
           .horizontal_sync_polarity = (DISPLAY_SIGNAL_POLARITY_HIACTIVE != DISPLAY_SIGNAL_POLARITY_HIACTIVE),
 
-          .video_mode_delay = 382 /* This value was calculated by FSP. An override is available but not recommended for most users */,
+          .video_mode_delay = 124 /* This value was calculated by FSP. An override is available but not recommended for most users */,
 
           .hsa_no_lp = ((0x0) & R_MIPI_DSI_VMSET0R_HSANOLP_Msk),
           .hbp_no_lp = ((0x0) & R_MIPI_DSI_VMSET0R_HBPNOLP_Msk),
@@ -133,7 +133,7 @@ const mipi_dsi_cfg_t g_mipi_dsi0_cfg =
           .crc_check_mask = (mipi_dsi_vc_t) (0x0),
           .scramble_enable = (0),
           .tearing_detect = (0),
-          .eotp_enable = (1),
+          .eotp_enable = (0),
 
           .p_extend = &g_mipi_dsi0_extended_cfg,
           .p_callback = mipi_dsi_callback,
@@ -242,7 +242,7 @@ const glcdc_extended_cfg_t g_display_extend_cfg =
   .tcon_de = GLCDC_TCON_PIN_2,
   .correction_proc_order = GLCDC_CORRECTION_PROC_ORDER_BRIGHTNESS_CONTRAST2GAMMA,
   .clksrc = GLCDC_CLK_SRC_INTERNAL,
-  .clock_div_ratio = GLCDC_PANEL_CLK_DIVISOR_8,
+  .clock_div_ratio = GLCDC_PANEL_CLK_DIVISOR_3,
   .dithering_mode = GLCDC_DITHERING_MODE_TRUNCATE,
   .dithering_pattern_A = GLCDC_DITHERING_PATTERN_11,
   .dithering_pattern_B = GLCDC_DITHERING_PATTERN_11,
