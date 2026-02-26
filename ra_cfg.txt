@@ -145,8 +145,8 @@ FSP Configuration
     
   RA8D1 event data
   RA Common
-    Main stack size (bytes): 0x400
-    Heap size (bytes): 0
+    Main stack size (bytes): 0x1000
+    Heap size (bytes): 0x4000
     Bootloader Secondary XIP: Disabled
     MCU Vcc (mV): 3300
     Parameter checking: Disabled
@@ -169,23 +169,23 @@ FSP Configuration
     PLL Mul x80-99|Mul x80|PLL Mul x80.00
     PLL1P Div /2
     PLL1Q Div /3
-    PLL1R Div /3
-    PLL2 Disabled
-    PLL2 Div /2
-    PLL2 Mul x80-99|Mul x96|PLL2 Mul x96.00
-    PLL2P Div /2
-    PLL2Q Div /2
-    PLL2R Div /2
+    PLL1R Div /5
+    PLL2 Src: XTAL
+    PLL2 Div /4
+    PLL2 Mul x140-159|Mul x144|PLL2 Mul x144.00
+    PLL2P Div /4
+    PLL2Q Div /3
+    PLL2R Div /8
     Clock Src: PLL1P
     CLKOUT Src: LOCO
-    SCICLK Src: PLL1P
-    SPICLK Disabled
+    SCICLK Src: PLL1R
+    SPICLK Src: HOCO
     CANFDCLK Disabled
     LCDCLK Src: PLL1P
     I3CCLK Disabled
     USBCLK Src: HOCO
     USB60CLK Disabled
-    OCTACLK Disabled
+    OCTACLK Src: PLL2P
     CPUCLK Div /1
     ICLK Div /2
     PCLKA Div /4
@@ -205,7 +205,7 @@ FSP Configuration
     I3CCLK Div /3
     USBCLK Div /1
     USB60CLK Div /8
-    OCTACLK Div /4
+    OCTACLK Div /2
     
   Pin Configurations
     R7FA8D1BHECFC.pincfg -> g_bsp_pin_cfg
@@ -232,14 +232,14 @@ FSP Configuration
       P010 159 - - - - Disabled - - "ACMPHS0: IVCMP0_0; ADC0: AN005; IRQ14: IRQ14" - None - - 
       P014 152 - - - - Disabled - - "ADC0: AN007; DAC120: DA0" - None - - 
       P015 151 - - - - Disabled - - "ADC1: AN105; DAC121: DA1; IRQ13: IRQ13" - None - - 
-      P100 132 - - - - Disabled - - "AGT0: AGTIO0; GPT8: GTIOC8B; GPT_POEGA: GTETRGA; IRQ2: IRQ2; OSPI: OM_SIO0; SCI9: DE9; SCI9: SCK9; SPI1: MISO1" - None - - 
+      P100 132 OSPI_OM_SIO0 - HH None "Peripheral mode" - - "AGT0: AGTIO0; GPT8: GTIOC8B; GPT_POEGA: GTETRGA; IRQ2: IRQ2; OSPI: OM_SIO0; SCI9: DE9; SCI9: SCK9; SPI1: MISO1" - O - - 
       P101 129 - - - - Disabled - - "AGT0: AGTEE0; GPT8: GTIOC8A; GPT_POEGB: GTETRGB; IRQ1: IRQ1; OSPI: OM_SIO3; SCI9: RXD9; SPI1: MOSI1" - None - - 
       P102 128 - - - - Disabled - - "ADC(Digital): ADTRG0; AGT0: AGTO0; CANFD0: CRX0; GPT2: GTIOC2B; GPT_OPS: GTOWLO; OSPI: OM_SIO4; SCI9: TXD9; SPI1: RSPCK1" - None - - 
-      P103 127 - - - - Disabled - - "CANFD0: CTX0; GPT2: GTIOC2A; GPT_OPS: GTOWUP; OSPI: OM_SIO2; SCI9: CTS_RTS9; SCI9: DE9; SPI1: SSLB0" - None - - 
+      P103 127 OSPI_OM_SIO2 - HH - "Peripheral mode" - - "CANFD0: CTX0; GPT2: GTIOC2A; GPT_OPS: GTOWUP; OSPI: OM_SIO2; SCI9: CTS_RTS9; SCI9: DE9; SPI1: SSLB0" - O - - 
       P104 126 - - - - Disabled - - "GPT1: GTIOC1B; GPT_POEGB: GTETRGB; IRQ1: IRQ1; OSPI: OM_CS1; SCI9: CTS9; SPI1: SSLB1" - None - - 
       P105 125 - - - - Disabled - - "GPT1: GTIOC1A; IRQ0: IRQ0; OSPI: OM_ECSINT1; SPI1: SSLB2; ULPT1: ULPTO1_A-DS" - None - - 
       P106 124 - - - - Disabled - - "AGT0: AGTOB0; GPT8: GTIOC8B; GPT_OPS: GTOWLO; OSPI: OM_RESET; SPI1: SSLB3; ULPT1: ULPTEE1_A-DS" - None - - 
-      P107 123 - - - - Disabled - - "AGT0: AGTOA0; GPT8: GTIOC8A; GPT_OPS: GTOWUP; OSPI: OM_CS0" - None - - 
+      P107 123 OSPI_OM_CS0 - H - "Peripheral mode" - - "AGT0: AGTOA0; GPT8: GTIOC8A; GPT_OPS: GTOWUP; OSPI: OM_CS0" - O - - 
       P112 89 SDRAM_DQM1 - H - "Peripheral mode" - - "BUS: A0; BUS: BC0; ETHER_MII: ET0_CRS; ETHER_RMII: RMII0_CRS_DV; GLCD: LCD_DATA10; GPT3: GTIOC3B; SCI0: TXD0; SDRAM: A0; SDRAM: DQM1; SPI0: SSLA2; SSIE: SSIBLK0; ULPT0: ULPTOB0_A-DS" - IO - - 
       P113 90 SDRAM_CKE - H - "Peripheral mode" - - "BUS: CS1#; ETHER_MII: ET0_EXOUT; ETHER_RMII: ET0_EXOUT; GLCD: LCD_DATA9; GPT2: GTIOC2A; SCI0: RXD0; SDRAM: CKE; SPI0: SSLA1; SSIE: SSIFS0; SSIE: SSILRCK0; ULPT0: ULPTOA0_A-DS" - O - - 
       P114 91 SDRAM_WE - H - "Peripheral mode" - - "BUS: CS0#; ETHER_MII: ET0_LINKSTA; ETHER_RMII: ET0_LINKSTA; GLCD: LCD_DATA8; GPT2: GTIOC2B; SCI0: CTS_RTS0; SCI0: DE0; SDRAM: WE; SPI0: SSLA0; SSIE0: SSIRXD0" - O - - 
@@ -251,8 +251,8 @@ FSP Configuration
       P209 64 JTAG/SWD_TDO - L - "Peripheral mode" - - "CANFD1: CTX1; CLKOUT: CLKOUT; GPT1: GTIOC1A; GPT_OPS: GTOVUP; JTAG/SWD: TDO; SCI9: TXD9; TRACE: TRACESWO" - IO - - 
       P210 63 JTAG/SWD_TMS - L - "Peripheral mode" - - "GPT0: GTIOC0B; GPT_OPS: GTOULO; JTAG/SWD: SWDIO; JTAG/SWD: TMS; SCI9: CTS_RTS9; SCI9: DE9" - IO - - 
       P211 62 JTAG/SWD_TCK - L - "Peripheral mode" - - "GPT0: GTIOC0A; GPT_OPS: GTOUUP; JTAG/SWD: SWCLK; JTAG/SWD: TCK; SCI9: DE9; SCI9: SCK9" - IO - - 
-      P212 24 - - - - Disabled - - "AGT1: AGTEE1; CGC: EXTAL; GPT0: GTIOC0B; GPT_POEGD: GTETRGD; IRQ3: IRQ3; SCI1: RXD1" - None - - 
-      P213 23 - - - - Disabled - - "ADC(Digital): ADTRG1; CGC: XTAL; GPT0: GTIOC0A; GPT_POEGC: GTETRGC; IRQ2: IRQ2; SCI1: TXD1; ULPT0: ULPTEE0" - None - - 
+      P212 24 CGC_EXTAL - L None "Peripheral mode" - - "AGT1: AGTEE1; CGC: EXTAL; GPT0: GTIOC0B; GPT_POEGD: GTETRGD; IRQ3: IRQ3; SCI1: RXD1" - IO - - 
+      P213 23 CGC_XTAL - L None "Peripheral mode" - - "ADC(Digital): ADTRG1; CGC: XTAL; GPT0: GTIOC0A; GPT_POEGC: GTETRGC; IRQ2: IRQ2; SCI1: TXD1; ULPT0: ULPTEE0" - IO - - 
       P300 88 SDRAM_A1 - H None "Peripheral mode" - - "BUS: A1; ETHER_MII: ET0_RX_CLK; ETHER_RMII: RMII0_RX_ER; GLCD: LCD_DATA11; GPT3: GTIOC3A; IRQ4: IRQ4; SCI0: DE0; SCI0: SCK0; SDRAM: A1; SDRAM: DQM3; SPI0: SSLA3; ULPT0: ULPTEVI0_A-DS" - O - - 
       P301 87 SDRAM_A2 - H None "Peripheral mode" - - "AGT0: AGTIO0; BUS: A2; ETHER_MII: ET0_ERXD0; ETHER_RMII: RMII0_RXD1; GLCD: LCD_DATA12; GPT4: GTIOC4B; GPT_OPS: GTOULO; IRQ6: IRQ6; SDHI0: SD0DAT3; SDRAM: A2; ULPT0: ULPTEE0_A-DS" - O - - 
       P302 86 SDRAM_A3 - H None "Peripheral mode" - - "BUS: A3; ETHER_MII: ET0_ERXD1; ETHER_RMII: RMII0_RXD0; GLCD: LCD_DATA13; GPT4: GTIOC4A; GPT_OPS: GTOUUP; IRQ5: IRQ5; SDHI0: SD0DAT2; SDRAM: A3; ULPT0: ULPTO0_A-DS" - O - - 
@@ -277,8 +277,8 @@ FSP Configuration
       P408 43 GPIO BACKLIGHT L - "Output mode (Initial Low)" - - "BUS: A17; GPT10: GTIOC10A; GPT_OPS: GTOWLO; IIC0: SCL0; IRQ7: IRQ7; SCI3: RXD3; SCI4: CTS4; ULPT0: ULPTOB0; USB FS: USB_VBUSEN; USB HS: USBHS_VBUSEN" - IO - - 
       P409 42 IIC0_SDA0 - M None "Peripheral mode" - - "BUS: A18; GPT_OPS: GTOWUP; IIC0: SDA0; IRQ6: IRQ6; SCI3: TXD3; ULPT0: ULPTOA0; USB FS: USB_OVRCURA_A-DS; USB HS: USBHS_OVRCURA" - IO - - 
       P410 41 IIC0_SCL0 - M None "Peripheral mode" - - "AGT1: AGTOB1; BUS: A19; GPT9: GTIOC9B; GPT_OPS: GTOVLO; IIC0: SCL0; IRQ5: IRQ5; SCI3: DE3; SCI3: SCK3; SDHI0: SD0DAT1; SPI1: MISO1; USB FS: USB_OVRCURB_A-DS; USB HS: USBHS_OVRCURB" - IO - - 
-      P411 40 GPIO LED_STATE L - "Output mode (Initial Low)" - - "AGT1: AGTOA1; BUS: A20; GPT9: GTIOC9A; GPT_OPS: GTOVUP; IRQ4: IRQ4; SCI3: CTS_RTS3; SCI3: DE3; SDHI0: SD0DAT0; SPI1: MOSI1; USB FS: USB_ID; USB HS: USBHS_ID" - IO - - 
-      P412 39 GPIO DSI_DEST_SELECT L - "Output mode (Initial Low)" - - "AGT1: AGTEE1; BUS: A21; GPT_OPS: GTOULO; SCI3: CTS3; SDHI0: SD0CMD; SPI1: RSPCK1; USB FS: USB_EXICEN; USB HS: USBHS_EXICEN" - IO - - 
+      P411 40 - - - - Disabled - - "AGT1: AGTOA1; BUS: A20; GPT9: GTIOC9A; GPT_OPS: GTOVUP; IRQ4: IRQ4; SCI3: CTS_RTS3; SCI3: DE3; SDHI0: SD0DAT0; SPI1: MOSI1; USB FS: USB_ID; USB HS: USBHS_ID" - None - - 
+      P412 39 GPIO DSI_DEST_SELECT M - "Output mode (Initial Low)" - - "AGT1: AGTEE1; BUS: A21; GPT_OPS: GTOULO; SCI3: CTS3; SDHI0: SD0CMD; SPI1: RSPCK1; USB FS: USB_EXICEN; USB HS: USBHS_EXICEN" - IO - - 
       P413 38 - - - - Disabled - - "BUS: A22; GPT_OPS: GTOUUP; SDHI0: SD0CLK; SPI1: SSLB0; ULPT1: ULPTEE1" - None - - 
       P414 37 SCI4_RXD4 UART4_RX L None "Peripheral mode" - - "BUS: A23; CANFD1: CRX1; CEU: VIO_D13; GPT0: GTIOC0B; GPT_OPS: GTADSM1; IRQ9: IRQ9; SCI4: RXD4; SDHI0: SD0WP; SPI1: SSLB1" - I - - 
       P415 36 SCI4_TXD4 UART4_TX L None "Peripheral mode" - - "BUS: WAIT; CANFD1: CTX1; CEU: VIO_D12; GPT0: GTIOC0A; GPT_OPS: GTADSM0; IRQ8: IRQ8; SCI4: TXD4; SDHI0: SD0CD; SPI1: SSLB2" - O - - 
@@ -317,11 +317,11 @@ FSP Configuration
       P800 133 - - - - Disabled - - "AGT0: AGTOA0; GPT11: GTIOC11A; GPT_OPS: GTIU; IRQ11: IRQ11; OSPI: OM_SIO5; SCI2: CTS2" - None - - 
       P801 134 - - - - Disabled - - "AGT0: AGTOB0; GPT11: GTIOC11B; GPT_OPS: GTIV; IRQ12: IRQ12; OSPI: OM_DQS; SCI2: TXD2" - None - - 
       P802 135 - - - - Disabled - - "GPT12: GTIOC12A; GPT_OPS: GTIW; OSPI: OM_SIO6; SCI2: RXD2" - None - - 
-      P803 136 - - - - Disabled - - "GPT12: GTIOC12B; GPT_POEGC: GTETRGC; OSPI: OM_SIO1; SCI2: DE2; SCI2: SCK2" - None - - 
+      P803 136 OSPI_OM_SIO1 - HH - "Peripheral mode" - - "GPT12: GTIOC12B; GPT_POEGC: GTETRGC; OSPI: OM_SIO1; SCI2: DE2; SCI2: SCK2" - O - - 
       P804 137 - - - - Disabled - - "GPT13: GTIOC13A; GPT_POEGD: GTETRGD; IRQ14: IRQ14; OSPI: OM_SIO7; SCI2: CTS_RTS2; SCI2: DE2" - None - - 
       P805 173 - - - - Disabled - - "ADC0: AN017; ADC1: AN117; CEU: VIO_D15; GLCD: LCD_TCON0" - None - - 
       P806 172 - - - - Disabled - - "ADC0: AN018; ADC1: AN118; CEU: VIO_D14; GLCD: LCD_CLK; IRQ0: IRQ0" - None - - 
-      P808 138 - - - - Disabled - - "GPT13: GTIOC13B; IRQ15: IRQ15; OSPI: OM_SCLK" - None - - 
+      P808 138 OSPI_OM_SCLK - HH None "Peripheral mode" - - "GPT13: GTIOC13B; IRQ15: IRQ15; OSPI: OM_SCLK" - O - - 
       P809 139 - - - - Disabled - - "OSPI: OM_SCLKN" - None - - 
       P810 142 - - - - Disabled - - "SDHI1: SD1CLK; ULPT0: ULPTOA0" - None - - 
       P811 143 - - - - Disabled - - "SDHI1: SD1CMD; ULPT0: ULPTOB0; USB FS: USB_ID" - None - - 
@@ -330,11 +330,11 @@ FSP Configuration
       P815 46 "USB FS_USB_DM" - L - "Peripheral mode" - - "CANFD0: CTX0; GPT8: GTIOC8A; USB FS: USB_DM" - IO - - 
       P905 73 SDRAM_A14 - H None "Peripheral mode" - - "BUS: A14; GLCD: LCD_DATA19; IRQ8: IRQ8; SCI3: CTS3; SDRAM: A14" - O - - 
       P906 72 SDRAM_A15 - H None "Peripheral mode" - - "BUS: A15; GLCD: LCD_DATA20; GPT13: GTIOC13B; IRQ9: IRQ9; SDRAM: A15; USB FS: USB_ID" - O - - 
-      P907 71 - - - - Disabled - - "BUS: A16; GLCD: LCD_DATA21; GPT13: GTIOC13A; IRQ10: IRQ10; SDRAM: A16; USB FS: USB_EXICEN" - None - - 
+      P907 71 GPIO LT_INT - None "Input mode" - - "BUS: A16; GLCD: LCD_DATA21; GPT13: GTIOC13A; IRQ10: IRQ10; SDRAM: A16; USB FS: USB_EXICEN" - IO - - 
       P908 70 SDRAM_RAS - H None "Peripheral mode" - - "BUS: CS2#; GLCD: LCD_DATA22; GPT12: GTIOC12B; IRQ11: IRQ11; SDRAM: RAS; USB HS: USBHS_ID" - O - - 
       P909 69 SDRAM_CAS - H - "Peripheral mode" - - "BUS: CS3#; GLCD: LCD_DATA23; GPT12: GTIOC12A; SDRAM: CAS; USB HS: USBHS_EXICEN" - O - - 
       PA00 108 SDRAM_DQ7 - H - "Peripheral mode" - - "BUS: D7; GLCD: LCD_CLK; SDRAM: DQ7" - IO - - 
-      PA01 107 - - - - Disabled - - "BUS: RD; GLCD: LCD_TCON0" - None - - 
+      PA01 107 GPIO LED_STATUS L - "Output mode (Initial Low)" - - "BUS: RD; GLCD: LCD_TCON0" - IO - - 
       PA08 102 SDRAM_DQ15 - H None "Peripheral mode" - - "BUS: D15; GLCD: LCD_TCON3; GPT_POEGD: GTETRGD; IRQ6: IRQ6; SDRAM: DQ15" - IO - - 
       PA09 103 SDRAM_SDCLK - HH None "Peripheral mode" - - "BUS: EBCLK; GLCD: LCD_TCON2; IRQ5: IRQ5; SDRAM: SDCLK" - O - - 
       PA10 104 SDRAM_DQM0 - H None "Peripheral mode" - - "BUS: WR; BUS: WR0; GLCD: LCD_TCON1; IRQ4: IRQ4; SDRAM: DQM0" - IO - - 
@@ -433,8 +433,8 @@ FSP Configuration
       Interrupts: Underflow 1 Interrupt Priority: Disabled
       Interrupts: Underflow 2 Interrupt Priority: Disabled
       Input: Graphics Layer 1: General: Enabled: Yes
-      Input: Graphics Layer 1: General: Horizontal size: 1280
-      Input: Graphics Layer 1: General: Vertical size: 720
+      Input: Graphics Layer 1: General: Horizontal size: 800
+      Input: Graphics Layer 1: General: Vertical size: 600
       Input: Graphics Layer 1: General: Horizontal position: 0
       Input: Graphics Layer 1: General: Vertical position: 0
       Input: Graphics Layer 1: Framebuffer: Framebuffer name: fb_background
@@ -448,44 +448,44 @@ FSP Configuration
       Input: Graphics Layer 1: Fading: Speed: 0
       Input: Graphics Layer 2: General: Enabled: No
       Input: Graphics Layer 2: General: Horizontal size: 720
-      Input: Graphics Layer 2: General: Vertical size: 720
+      Input: Graphics Layer 2: General: Vertical size: 576
       Input: Graphics Layer 2: General: Horizontal position: 0
       Input: Graphics Layer 2: General: Vertical position: 0
       Input: Graphics Layer 2: Framebuffer: Framebuffer name: fb_foreground
       Input: Graphics Layer 2: Framebuffer: Number of framebuffers: 2
       Input: Graphics Layer 2: Framebuffer: Section for framebuffer allocation: .sdram_noinit
-      Input: Graphics Layer 2: General: Color format: RGB565 (16-bit)
+      Input: Graphics Layer 2: General: Color format: ARGB8888 (32-bit)
       Input: Graphics Layer 2: General: Line descending mode: Disabled
       Input: Graphics Layer 2: Line Repeat: Enable: Off
       Input: Graphics Layer 2: Line Repeat: Repeat count: 0
       Input: Graphics Layer 2: Fading: Mode: None
       Input: Graphics Layer 2: Fading: Speed: 0
-      Output: Timing: Horizontal total cycles: 1650
-      Output: Timing: Horizontal active video cycles: 1280
-      Output: Timing: Horizontal back porch cycles: 220
-      Output: Timing: Horizontal sync signal cycles: 40
-      Output: Timing: Horizontal sync signal polarity: High active
-      Output: Timing: Vertical total lines: 750
-      Output: Timing: Vertical active video lines: 720
-      Output: Timing: Vertical back porch lines: 20
-      Output: Timing: Vertical sync signal lines: 5
-      Output: Timing: Vertical sync signal polarity: High active
+      Output: Timing: Horizontal total cycles: 1184
+      Output: Timing: Horizontal active video cycles: 800
+      Output: Timing: Horizontal back porch cycles: 216
+      Output: Timing: Horizontal sync signal cycles: 128
+      Output: Timing: Horizontal sync signal polarity: Low active
+      Output: Timing: Vertical total lines: 632
+      Output: Timing: Vertical active video lines: 600
+      Output: Timing: Vertical back porch lines: 27
+      Output: Timing: Vertical sync signal lines: 4
+      Output: Timing: Vertical sync signal polarity: Low active
       Output: Timing: Data Enable Signal Polarity: High active
-      Output: Timing: Sync edge: Rising edge
+      Output: Timing: Sync edge: Falling edge
       Output: Format: Color format: 24bits RGB888
       Output: Format: Color order: RGB
       Output: Format: Endian: Little endian
-      Output: Background: Alpha: 255
+      Output: Background: Alpha: 0
       Output: Background: Red: 0
       Output: Background: Green: 0
-      Output: Background: Blue: 255
+      Output: Background: Blue: 0
       CLUT: Enabled: No
       CLUT: Size: 256
       TCON: Hsync pin select: LCD_TCON1
       TCON: Vsync pin select: LCD_TCON0
       TCON: Data enable (DE) pin select: LCD_TCON2
       TCON: Panel clock source: Internal clock (GLCDCLK)
-      TCON: Panel clock division ratio: 1/3
+      TCON: Panel clock division ratio: 1/6
       Color Correction: Process order: Brightness/contrast first
       Color Correction: Brightness: Enabled: No
       Color Correction: Brightness: Red channel: 512
@@ -605,10 +605,10 @@ FSP Configuration
         Low Power: Ultra Low Power State Wakeup Period (us): 1000
         Clock Lane: Continuous Mode: Enable
         Data Lane: Number of Data Lanes: 2
-        Video Mode: Pixel Packet: Sync Pulse: HSE and VSE are not transmitted
+        Video Mode: Pixel Packet: Sync Pulse: HSE and VSE are transmitted
         Video Mode: Pixel Packet: Virtual Channel ID: 0
         Video Mode: Delay Override (0 to disable): 0
-        Video Mode: Prevent LP Transition: 
+        Video Mode: Prevent LP Transition: No LP during the HSA period, No LP during the HBP period, No LP during the HFP period
         Interrupts: dsi_seq0 Interrupt Priority: Priority 12
         Interrupts: dsi_seq1 Interrupt Priority: Priority 12
         Interrupts: dsi_vin1 Interrupt Priority: Priority 12
@@ -617,15 +617,15 @@ FSP Configuration
         Interrupts: dsi_ppi Interrupt Priority: Priority 12
         Interrupts: Receive Interrupt Enable: BTA Request End, LP-RX Host Processor Timeout, Turnaround Acknowledge Timeout, Response Packet Receive, EoTp Receive, Tearing Effect Trigger Receive, ACK Trigger Receive, External Tearing Effect Detect, Malform Error, Multi Bit ECC Error, Unexpected Packet Error, Word Count Error, CRC Error, Internal Bus Error, Receive Buffer Overflow Error, Peripheral Response Timeout Error, No Response Error, Retrun Packet Size Error, Single Bit ECC Error, Acknowledge and Error Report Receive
         Interrupts: Fatal Error Interrupt Enable: HS TX Timeout, LP-RX Host Processor Timeout, Turnaround Acknowledge Timeout, Escape mode Entry Error, LPDT Sync Error, Control Error, LP0 Contention Error, LP1 Contention Error
-        Interrupts: Physical Lane Interrupt Enable: 
+        Interrupts: Physical Lane Interrupt Enable: Data Lane ULPS Enter, Data Lane ULPS Exit
         Interrupts: Video Mode Interrupt Enable: Video Buffer Underflow Error, Video Buffer Overflow Error
         Interrupts: Sequence Channel 0 Interrupt Enable: All Actions Finish, All Descriptors Finish, Tx Internal Bus Error, Receive Fatal Error, Receive Fail, Receive Packet Data Fail, Receive Correctable Error Interrupt, Receive Acknowledge and Error Report Packet
         Interrupts: Sequence Channel 1 Interrupt Enable: All Actions Finish, All Descriptors Finish, Packet Size Error, Tx Internal Bus Error, Receive Fatal Error, Receive Fail, Receive Packet Data Fail, Receive Correctable Error Interrupt, Receive Acknowledge and Error Report Packet
         Interrupts: Callback: mipi_dsi_callback
         Interrupts: Callback Context: NULL
         Options: Data Scramble Enable: Disable
-        Options: EoTP Enable: Disable
-        Options: ECC Check Enable: Enable
+        Options: EoTP Enable: Enable
+        Options: ECC Check Enable: Disable
         Options: CRC Enable: 
         Options: Maximum Return Packet Size: 1
         Options: External Tearing Effect Detection Sense Select: Rising Edge
@@ -640,7 +640,7 @@ FSP Configuration
         
         Instance "g_mipi_phy0 MIPI Physical Layer (r_mipi_phy)"
           General: Name: g_mipi_phy0
-          DSI PLL Frequency (MHz): 900
+          DSI PLL Frequency (MHz): 1000
           Timing: LP Clock Divider: 5
           Timing: TINIT (ns): 600000
           Timing: THSPREP: ns: 40
@@ -674,13 +674,13 @@ FSP Configuration
       Name: g_i2c_master0
       Channel: 0
       Rate: Standard
-      Custom Rate (bps): 0
+      Custom Rate (bps): 50000
       Rise Time (ns): 120
       Fall Time (ns): 120
       Duty Cycle (%): 50
-      Slave Address: 72
+      Slave Address: 73
       Address Mode: 7-Bit
-      Timeout Mode: Short Mode
+      Timeout Mode: Long Mode
       Timeout during SCL Low: Enabled
       Callback: i2c_master_callback
       Interrupt Priority Level: Priority 12

@@ -1,20 +1,20 @@
 /* generated common source file - do not edit */
 #include "common_data.h"
 /* MIPI PHY Macros */
-#define MIPI_PHY_CLKSTPT   ((uint16_t)1202.3333333333335)
+#define MIPI_PHY_CLKSTPT   ((uint16_t)1183)
 #define MIPI_PHY_CLKBFHT   ((uint8_t)10 + 1)
-#define MIPI_PHY_CLKKPT    ((uint8_t)21 + 4)
-#define MIPI_PHY_GOLPBKT   ((uint16_t)37)
+#define MIPI_PHY_CLKKPT    ((uint8_t)22 + 4)
+#define MIPI_PHY_GOLPBKT   ((uint16_t)40)
 
 #define MIPI_PHY_TINIT     (71999)
 #define MIPI_PHY_TCLKPREP  (8)
 #define MIPI_PHY_TCLKSETT  (59)
 #define MIPI_PHY_TCLKMISS  (35)
-#define MIPI_PHY_THSPREP   (6)
+#define MIPI_PHY_THSPREP   (5)
 #define MIPI_PHY_THSETT    (23)
 #define MIPI_PHY_TCLKTRAIL (7)
-#define MIPI_PHY_TCLKPOST  (21)
-#define MIPI_PHY_TCLKPRE   (2)
+#define MIPI_PHY_TCLKPOST  (19)
+#define MIPI_PHY_TCLKPRE   (1)
 #define MIPI_PHY_TCLKZERO  (27)
 #define MIPI_PHY_THSEXIT   (11)
 #define MIPI_PHY_THSTRAIL  (8)
@@ -40,8 +40,8 @@ const mipi_phy_timing_t g_mipi_phy0_timing =
 
 mipi_phy_ctrl_t g_mipi_phy0_ctrl;
 const mipi_phy_cfg_t g_mipi_phy0_cfg =
-{ .pll_settings = /* Calculated MIPI PHY PLL frequency: 900000000 Hz (error 0.00%) = (24000000 Hz / 1) * 37.50 / 1 */
-{ .div = 1 - 1, .pll_div = 0, .mul_int = 37 - 1, .mul_frac = 3 /* Value: 0.5 */},
+{ .pll_settings = /* Calculated MIPI PHY PLL frequency: 1000000000 Hz (error 0.00%) = (24000000 Hz / 3) * 125.00 / 1 */
+{ .div = 3 - 1, .pll_div = 0, .mul_int = 125 - 1, .mul_frac = 0 /* Value: 0 */},
   .lp_divisor = 5 - 1, .p_timing = &g_mipi_phy0_timing, .dsi_mode = (1), };
 /* Instance structure to use this module. */
 const mipi_phy_instance_t g_mipi_phy0 =
@@ -82,10 +82,11 @@ const mipi_dsi_extended_cfg_t g_mipi_dsi0_extended_cfg =
   .dsi_ferrie = R_MIPI_DSI_FERRIER_HTXTO_Msk | R_MIPI_DSI_FERRIER_LRXHTO_Msk | R_MIPI_DSI_FERRIER_TATO_Msk
           | R_MIPI_DSI_FERRIER_ESCENT_Msk | R_MIPI_DSI_FERRIER_SYNCESC_Msk | R_MIPI_DSI_FERRIER_CTRL_Msk
           | R_MIPI_DSI_FERRIER_CLP0_Msk | R_MIPI_DSI_FERRIER_CLP1_Msk | 0x0,
-  .dsi_plie = 0x0, .dsi_vmie = R_MIPI_DSI_VMIER_VBUFUDF_Msk | R_MIPI_DSI_VMIER_VBUFOVF_Msk | 0x0, .dsi_sqch0ie =
-          R_MIPI_DSI_SQCH0IER_AACTFIN_Msk | R_MIPI_DSI_SQCH0IER_ADESFIN_Msk | R_MIPI_DSI_SQCH0IER_TXIBERR_Msk
-                  | R_MIPI_DSI_SQCH0IER_RXFERR_Msk | R_MIPI_DSI_SQCH0IER_RXFAIL_Msk | R_MIPI_DSI_SQCH0IER_RXPFAIL_Msk
-                  | R_MIPI_DSI_SQCH0IER_RXCORERR_Msk | R_MIPI_DSI_SQCH0IER_RXAKE_Msk | 0x0,
+  .dsi_plie = R_MIPI_DSI_PLIER_DLULPENT_Msk | R_MIPI_DSI_PLIER_DLULPEXT_Msk | 0x0, .dsi_vmie =
+          R_MIPI_DSI_VMIER_VBUFUDF_Msk | R_MIPI_DSI_VMIER_VBUFOVF_Msk | 0x0,
+  .dsi_sqch0ie = R_MIPI_DSI_SQCH0IER_AACTFIN_Msk | R_MIPI_DSI_SQCH0IER_ADESFIN_Msk | R_MIPI_DSI_SQCH0IER_TXIBERR_Msk
+          | R_MIPI_DSI_SQCH0IER_RXFERR_Msk | R_MIPI_DSI_SQCH0IER_RXFAIL_Msk | R_MIPI_DSI_SQCH0IER_RXPFAIL_Msk
+          | R_MIPI_DSI_SQCH0IER_RXCORERR_Msk | R_MIPI_DSI_SQCH0IER_RXAKE_Msk | 0x0,
   .dsi_sqch1ie = R_MIPI_DSI_SQCH1IER_AACTFIN_Msk | R_MIPI_DSI_SQCH1IER_ADESFIN_Msk | R_MIPI_DSI_SQCH1IER_SIZEERR_Msk
           | R_MIPI_DSI_SQCH1IER_TXIBERR_Msk | R_MIPI_DSI_SQCH1IER_RXFERR_Msk | R_MIPI_DSI_SQCH1IER_RXFAIL_Msk
           | R_MIPI_DSI_SQCH1IER_RXPFAIL_Msk | R_MIPI_DSI_SQCH1IER_RXCORERR_Msk | R_MIPI_DSI_SQCH1IER_RXAKE_Msk | 0x0, };
@@ -95,30 +96,33 @@ const mipi_dsi_cfg_t g_mipi_dsi0_cfg =
 
           .p_timing = &g_mipi_dsi0_timing,
 
-          .sync_pulse = (0),
+          .sync_pulse = (1),
           .data_type = MIPI_DSI_VIDEO_DATA_24RGB_PIXEL_STREAM,
           .virtual_channel_id = 0,
 
-          .vertical_active_lines = 720,
-          .vertical_sync_lines = 5,
-          .vertical_back_porch = (20 - 5),
-          .vertical_front_porch = (750 - 720 - 20 - 5),
-          .vertical_sync_polarity = (DISPLAY_SIGNAL_POLARITY_HIACTIVE != DISPLAY_SIGNAL_POLARITY_HIACTIVE),
+          .vertical_active_lines = 600,
+          .vertical_sync_lines = 4,
+          .vertical_back_porch = (27 - 4),
+          .vertical_front_porch = (632 - 600 - 27 - 4),
+          .vertical_sync_polarity = (DISPLAY_SIGNAL_POLARITY_LOACTIVE != DISPLAY_SIGNAL_POLARITY_HIACTIVE),
 
-          .horizontal_active_lines = 1280,
-          .horizontal_sync_lines = 40,
-          .horizontal_back_porch = (220 - 40),
-          .horizontal_front_porch = (1650 - 1280 - 220 - 40),
-          .horizontal_sync_polarity = (DISPLAY_SIGNAL_POLARITY_HIACTIVE != DISPLAY_SIGNAL_POLARITY_HIACTIVE),
+          .horizontal_active_lines = 800,
+          .horizontal_sync_lines = 128,
+          .horizontal_back_porch = (216 - 128),
+          .horizontal_front_porch = (1184 - 800 - 216 - 128),
+          .horizontal_sync_polarity = (DISPLAY_SIGNAL_POLARITY_LOACTIVE != DISPLAY_SIGNAL_POLARITY_HIACTIVE),
 
-          .video_mode_delay = 124 /* This value was calculated by FSP. An override is available but not recommended for most users */,
+          .video_mode_delay = 265 /* This value was calculated by FSP. An override is available but not recommended for most users */,
 
-          .hsa_no_lp = ((0x0) & R_MIPI_DSI_VMSET0R_HSANOLP_Msk),
-          .hbp_no_lp = ((0x0) & R_MIPI_DSI_VMSET0R_HBPNOLP_Msk),
-          .hfp_no_lp = ((0x0) & R_MIPI_DSI_VMSET0R_HFPNOLP_Msk),
+          .hsa_no_lp = ((R_MIPI_DSI_VMSET0R_HSANOLP_Msk | R_MIPI_DSI_VMSET0R_HBPNOLP_Msk
+                  | R_MIPI_DSI_VMSET0R_HFPNOLP_Msk | 0x0) & R_MIPI_DSI_VMSET0R_HSANOLP_Msk),
+          .hbp_no_lp = ((R_MIPI_DSI_VMSET0R_HSANOLP_Msk | R_MIPI_DSI_VMSET0R_HBPNOLP_Msk
+                  | R_MIPI_DSI_VMSET0R_HFPNOLP_Msk | 0x0) & R_MIPI_DSI_VMSET0R_HBPNOLP_Msk),
+          .hfp_no_lp = ((R_MIPI_DSI_VMSET0R_HSANOLP_Msk | R_MIPI_DSI_VMSET0R_HBPNOLP_Msk
+                  | R_MIPI_DSI_VMSET0R_HFPNOLP_Msk | 0x0) & R_MIPI_DSI_VMSET0R_HFPNOLP_Msk),
 
           .num_lanes = 2,
-          .ulps_wakeup_period = 87,
+          .ulps_wakeup_period = 97,
           .continuous_clock = (1),
 
           .hs_tx_timeout = 0,
@@ -129,11 +133,11 @@ const mipi_dsi_cfg_t g_mipi_dsi0_cfg =
           .hsrw_timeout = (0 << R_MIPI_DSI_PRESPTOHSSETR_HSRTO_Pos) | 0,
 
           .max_return_packet_size = 1,
-          .ecc_enable = (1),
+          .ecc_enable = (0),
           .crc_check_mask = (mipi_dsi_vc_t) (0x0),
           .scramble_enable = (0),
           .tearing_detect = (0),
-          .eotp_enable = (0),
+          .eotp_enable = (1),
 
           .p_extend = &g_mipi_dsi0_extended_cfg,
           .p_callback = mipi_dsi_callback,
@@ -242,7 +246,7 @@ const glcdc_extended_cfg_t g_display_extend_cfg =
   .tcon_de = GLCDC_TCON_PIN_2,
   .correction_proc_order = GLCDC_CORRECTION_PROC_ORDER_BRIGHTNESS_CONTRAST2GAMMA,
   .clksrc = GLCDC_CLK_SRC_INTERNAL,
-  .clock_div_ratio = GLCDC_PANEL_CLK_DIVISOR_3,
+  .clock_div_ratio = GLCDC_PANEL_CLK_DIVISOR_6,
   .dithering_mode = GLCDC_DITHERING_MODE_TRUNCATE,
   .dithering_pattern_A = GLCDC_DITHERING_PATTERN_11,
   .dithering_pattern_B = GLCDC_DITHERING_PATTERN_11,
@@ -285,7 +289,7 @@ const display_cfg_t g_display_cfg =
 #endif
             .hsize = DISPLAY_HSIZE_INPUT1,
             .vsize = DISPLAY_VSIZE_INPUT1, .hstride = DISPLAY_BUFFER_STRIDE_PIXELS_INPUT1, .format =
-                    DISPLAY_IN_FORMAT_16BITS_RGB565,
+                    DISPLAY_IN_FORMAT_32BITS_ARGB8888,
             .line_descending_enable = false, .lines_repeat_enable = false, .lines_repeat_times = 0 },
 
           /** Input1(Graphics1 layer) layer configuration */
@@ -303,18 +307,18 @@ const display_cfg_t g_display_cfg =
           /** Output configuration */
           .output =
                   { .htiming =
-                  { .total_cyc = 1650, .display_cyc = 1280, .back_porch = 220, .sync_width = 40, .sync_polarity =
-                            DISPLAY_SIGNAL_POLARITY_HIACTIVE },
+                  { .total_cyc = 1184, .display_cyc = 800, .back_porch = 216, .sync_width = 128, .sync_polarity =
+                            DISPLAY_SIGNAL_POLARITY_LOACTIVE },
                     .vtiming =
-                    { .total_cyc = 750, .display_cyc = 720, .back_porch = 20, .sync_width = 5, .sync_polarity =
-                              DISPLAY_SIGNAL_POLARITY_HIACTIVE },
+                    { .total_cyc = 632, .display_cyc = 600, .back_porch = 27, .sync_width = 4, .sync_polarity =
+                              DISPLAY_SIGNAL_POLARITY_LOACTIVE },
                     .format = DISPLAY_OUT_FORMAT_24BITS_RGB888, .endian = DISPLAY_ENDIAN_LITTLE, .color_order =
                             DISPLAY_COLOR_ORDER_RGB,
                     .data_enable_polarity = DISPLAY_SIGNAL_POLARITY_HIACTIVE, .sync_edge =
-                            DISPLAY_SIGNAL_SYNC_EDGE_RISING,
+                            DISPLAY_SIGNAL_SYNC_EDGE_FALLING,
                     .bg_color =
                     { .byte =
-                    { .a = 255, .r = 0, .g = 0, .b = 255 } },
+                    { .a = 0, .r = 0, .g = 0, .b = 0 } },
 #if (GLCDC_CFG_COLOR_CORRECTION_ENABLE)
                 .brightness =
                 {
@@ -413,7 +417,7 @@ const display_cfg_t g_display_cfg =
                 .hsize               = DISPLAY_HSIZE_INPUT1,
                 .vsize               = DISPLAY_VSIZE_INPUT1,
                 .hstride             = DISPLAY_BUFFER_STRIDE_PIXELS_INPUT1,
-                .format              = DISPLAY_IN_FORMAT_16BITS_RGB565,
+                .format              = DISPLAY_IN_FORMAT_32BITS_ARGB8888,
                 .line_descending_enable = false,
                 .lines_repeat_enable = false,
                 .lines_repeat_times  = 0

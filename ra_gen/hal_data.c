@@ -5,7 +5,7 @@ sci_b_uart_instance_ctrl_t g_uart4_ctrl;
 sci_b_baud_setting_t g_uart4_baud_setting =
         {
         /* Baud rate calculated with 0.160% error. */.baudrate_bits_b.abcse = 0,
-          .baudrate_bits_b.abcs = 0, .baudrate_bits_b.bgdm = 1, .baudrate_bits_b.cks = 0, .baudrate_bits_b.brr = 64, .baudrate_bits_b.mddr =
+          .baudrate_bits_b.abcs = 0, .baudrate_bits_b.bgdm = 1, .baudrate_bits_b.cks = 0, .baudrate_bits_b.brr = 25, .baudrate_bits_b.mddr =
                   (uint8_t) 256,
           .baudrate_bits_b.brme = false };
 
@@ -72,16 +72,16 @@ const uart_instance_t g_uart4 =
 { .p_ctrl = &g_uart4_ctrl, .p_cfg = &g_uart4_cfg, .p_api = &g_uart_on_sci_b };
 iic_master_instance_ctrl_t g_i2c_master0_ctrl;
 const iic_master_extended_cfg_t g_i2c_master0_extend =
-{ .timeout_mode = IIC_MASTER_TIMEOUT_MODE_SHORT,
+{ .timeout_mode = IIC_MASTER_TIMEOUT_MODE_LONG,
   .timeout_scl_low = IIC_MASTER_TIMEOUT_SCL_LOW_ENABLED,
   .smbus_operation = 0,
-  /* Actual calculated bitrate: 98945. Actual calculated duty cycle: 51%. */.clock_settings.brl_value = 15,
+  /* Actual calculated bitrate: 48765. Actual calculated duty cycle: 50%. */.clock_settings.brl_value = 16,
   .clock_settings.brh_value = 16,
-  .clock_settings.cks_value = 4,
+  .clock_settings.cks_value = 5,
   .clock_settings.sddl_value = 0,
   .clock_settings.dlcs_value = 0, };
 const i2c_master_cfg_t g_i2c_master0_cfg =
-{ .channel = 0, .rate = I2C_MASTER_RATE_STANDARD, .slave = 72, .addr_mode = I2C_MASTER_ADDR_MODE_7BIT,
+{ .channel = 0, .rate = I2C_MASTER_RATE_STANDARD, .slave = 73, .addr_mode = I2C_MASTER_ADDR_MODE_7BIT,
 #define RA_NOT_DEFINED (1)
 #if (RA_NOT_DEFINED == RA_NOT_DEFINED)
   .p_transfer_tx = NULL,

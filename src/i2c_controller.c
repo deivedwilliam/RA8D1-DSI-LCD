@@ -10,84 +10,46 @@
 #include "common_utils.h"
 
 
-static fsp_err_t validate_i2c_event(void);
-
+static fsp_err_t wait_i2c_event(i2c_master_event_t expected_event);
 
 static volatile i2c_master_event_t i2c_event = I2C_MASTER_EVENT_ABORTED;
 
 fsp_err_t I2C_WriteByte(uint8_t device_address, uint8_t reg_address, uint8_t data){
-    fsp_err_t err = FSP_SUCCESS;
+    fsp_err_t err;
+    uint8_t buf[2];
+
+    buf[0] = reg_address;
+    buf[1] = data;
 
     err = R_IIC_MASTER_SlaveAddressSet(&g_i2c_master0_ctrl, device_address, I2C_MASTER_ADDR_MODE_7BIT);
-    if(FSP_ERR_TRANSFER_ABORTED == err)
-    {
-        printf("** R_IIC_MASTER_SlaveAddressSet API failed* \r\n");
-        return err;
-    }
+    if (err != FSP_SUCCESS) return err;
 
-    err = R_IIC_MASTER_Write(&g_i2c_master0_ctrl, &reg_address, sizeof(uint8_t), true);
-    validate_i2c_event();
+    i2c_event = RESET_VALUE;
+    err = R_IIC_MASTER_Write(&g_i2c_master0_ctrl, buf, 2, false);
+    if (err != FSP_SUCCESS) return err;
 
-    if(FSP_ERR_TRANSFER_ABORTED == err)
-    {
-       printf("** R_IIC_MASTER_Write API failed ** \r\n");
-    }
-    else
-    {
-       err  = R_IIC_MASTER_Write(&g_i2c_master0_ctrl, &data, sizeof(uint8_t), false);
-       if (err != FSP_SUCCESS)
-       {
-           printf("** R_IIC_MASTER_Write API failed ** \r\n");
-       }
-       else
-       {
-           err = validate_i2c_event();
-           /* handle error */
-           if(err == FSP_ERR_TRANSFER_ABORTED)
-           {
-               printf("** I2C transfer failed, operation aborted** \r\n");
-           }
-       }
-    }
-    return err;
+    return wait_i2c_event(I2C_MASTER_EVENT_TX_COMPLETE);
 }
 
 
 fsp_err_t I2C_ReadByte(uint8_t device_address, uint8_t reg_address, uint8_t* data){
-    fsp_err_t err = FSP_SUCCESS;
+    fsp_err_t err;
 
-    err = R_IIC_MASTER_SlaveAddressSet(&g_i2c_master0_ctrl, device_address, I2C_MASTER_ADDR_MODE_7BIT);
-    if(FSP_ERR_TRANSFER_ABORTED == err)
-    {
-        printf("** R_IIC_MASTER_SlaveAddressSet API failed* \r\n");
-        return err;
-    }
+      err = R_IIC_MASTER_SlaveAddressSet(&g_i2c_master0_ctrl, device_address, I2C_MASTER_ADDR_MODE_7BIT);
+      if (err != FSP_SUCCESS) return err;
 
-    err = R_IIC_MASTER_Write(&g_i2c_master0_ctrl, &reg_address, sizeof(uint8_t), true);
-    validate_i2c_event();
+      i2c_event = RESET_VALUE;
+      err = R_IIC_MASTER_Write(&g_i2c_master0_ctrl, &reg_address, 1, true);
+      if (err != FSP_SUCCESS) return err;
 
-    if(FSP_ERR_TRANSFER_ABORTED == err)
-    {
-       printf("** R_IIC_MASTER_Write API failed ** \r\n");
-    }
-    else
-    {
-       err  = R_IIC_MASTER_Read(&g_i2c_master0_ctrl, data, sizeof(uint8_t), false);
-       if (err != FSP_SUCCESS)
-       {
-           printf("** R_IIC_MASTER_Read API failed ** \r\n");
-       }
-       else
-       {
-           err = validate_i2c_event();
-           /* handle error */
-           if(err == FSP_ERR_TRANSFER_ABORTED)
-           {
-               printf("** I2C transfer failed, operation aborted** \r\n");
-           }
-       }
-    }
-    return err;
+      err = wait_i2c_event(I2C_MASTER_EVENT_TX_COMPLETE);
+      if (err != FSP_SUCCESS) return err;
+
+      i2c_event = RESET_VALUE;
+      err = R_IIC_MASTER_Read(&g_i2c_master0_ctrl, data, 1, false);
+      if (err != FSP_SUCCESS) return err;
+
+      return wait_i2c_event(I2C_MASTER_EVENT_RX_COMPLETE);
 }
 
 
@@ -103,42 +65,26 @@ void i2c_master_callback(i2c_master_callback_args_t *p_args){
     }
 }
 
-
-/*******************************************************************************************************************//**
- *  @brief       Validate i2c receive/transmit  based on required write read operation
- *
- *  @param[in]   None
- *
- *  @retval      FSP_SUCCESS                       successful event receiving returns FSP_SUCCESS
- *               FSP_ERR_TRANSFER_ABORTED          Either on timeout elapsed or received callback event is
- *                                                 I2C_MASTER_EVENT_ABORTED
- **********************************************************************************************************************/
-static fsp_err_t validate_i2c_event(void)
+static fsp_err_t wait_i2c_event(i2c_master_event_t expected_event)
 {
-    uint16_t local_time_out = UINT16_MAX;
+    uint32_t timeout = 0xFFFFF;
 
-    /* resetting call back event capture variable */
-    i2c_event = (i2c_master_event_t)RESET_VALUE;
-
-    do
+    while ((i2c_event == RESET_VALUE) && timeout--)
     {
-        /* This is to avoid infinite loop */
-        --local_time_out;
-
-        if(local_time_out == RESET_VALUE)
-        {
-            return FSP_ERR_TRANSFER_ABORTED;
-        }
-
-    }while(i2c_event == RESET_VALUE);
-
-    if(i2c_event != I2C_MASTER_EVENT_ABORTED)
-    {
-        i2c_event = (i2c_master_event_t)RESET_VALUE;  // Make sure this is always Reset before return
-        return FSP_SUCCESS;
+        __NOP();
     }
 
-    i2c_event = (i2c_master_event_t)RESET_VALUE; // Make sure this is always Reset before return
-    return FSP_ERR_TRANSFER_ABORTED;
+    if (timeout == 0)
+    {
+        return FSP_ERR_TRANSFER_ABORTED;
+    }
+
+    if (i2c_event != expected_event)
+    {
+        return FSP_ERR_TRANSFER_ABORTED;
+    }
+
+    return FSP_SUCCESS;
 }
+
 
